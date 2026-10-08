@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-page-node-id="ZfqKfgCKuLkGypR2LIYHz1">
+<head data-page-node-id="I0nwRGT1C2AaM7whny1YWn">
+<meta charset="UTF-8" data-page-node-id="4E2PDSEMTIDQ7KgDRMfCl0">
+<meta name="viewport" content="width=device-width, initial-scale=1" data-page-node-id="OMtbroYs0kCcpsee2e2Dbk">
+<title>骗子酒馆 · 识谎局 —— 信号检测论交互式实验</title>
+<link rel="stylesheet" href="css/theme.css" data-page-node-id="XE5H71rG1mNn7ZNKFOfeE0">
+<link rel="stylesheet" href="css/layout.css" data-page-node-id="lDFxnIgFEHMHt9041HbYEb">
+</head>
+<body data-page-node-id="z8VSoWX000yMfkXokD4yEA">
+
+<!-- ══ 顶栏 ══════════════════════════════════════════ -->
+<header class="topbar" data-page-node-id="IMnNb5C3PEjYgV2mleWoGH">
+  <div class="brand" data-page-node-id="QlTVk25tfikLKKY20QMXwP">
+    <span class="brand-title" data-page-node-id="PNzEDUdI0WU6o8v4B0SEak">骗子酒馆 · 识谎局</span>
+    <span class="brand-sub" data-page-node-id="bPA1WGCQyIoIeyQm9QNLDt">信号检测论交互式实验</span>
+  </div>
+  <nav class="nav" data-page-node-id="bINVsq8I5DGQK1XdMZIJFr">
+    <button class="navbtn" data-go="setup" data-page-node-id="JswGXn86jpjPjcpQrs2URe">开局</button>
+    <button class="navbtn" data-go="rules" data-page-node-id="9eyehlJLBNqGiEeRFh7m8w">规则</button>
+    <button class="navbtn" data-go="theory" data-page-node-id="sz0fIJHZ8GmlXDhe70Qj2i">原理</button>
+    <button class="navbtn" data-go="history" data-page-node-id="CElVO9p3AsZw4qd9VLkXnw">历史</button>
+    <label class="sound" data-page-node-id="iVUGG1EwJKbhxLYhotHLJi"><input type="checkbox" id="soundToggle" data-page-node-id="o3WywzOu7iNuAm8u9ig3Pb"> 音效</label>
+  </nav>
+</header>
+
+<main id="app" data-page-node-id="odA8drCMWGqhAfRClDAJqA">
+
+<!-- ══ ① 开局设置 ════════════════════════════════════ -->
+<section id="screen-setup" class="screen active" data-page-node-id="7hCB3xFF82HeWISFN8hMFw">
+  <div class="panel" data-page-node-id="nE8NyizdFANe0SmUpVSzo6">
+    <h1 data-page-node-id="x7tbZjKCINj2G5AbRjnDSw">今晚的规矩</h1>
+    <p class="lede" data-page-node-id="qNDXzJEwCfUMYOZcLRZG00">
+      每一轮，对面的酒客会把牌推到你面前，报出一个点数。你要判断的只有一件事：
+      <b data-page-node-id="di4KJryjNjjEXxTrdlByRl">他在说谎，还是在说实话。</b>
+      「他在说谎」是<b data-page-node-id="tKSQxeMCjPjLuYh0uZWhD8">信号</b>，「他说实话」是<b data-page-node-id="Eh7fU37bAJFZ1yD8yJay9H">噪音</b>；你按下按钮的那一刻，就是一次信号检测。
+    </p>
+
+    <div class="param-grid" data-page-node-id="NGe9Ei3QnpvtktA75Pq12D">
+      <div class="param" data-page-node-id="yOvo6rt3XL8cP0npDC3Z1m">
+        <label for="dprimeRange" data-page-node-id="kAS7gHvArepl7cSPdkXGVG">辨别力 d′ —— 破绽有多明显</label>
+        <div class="row" data-page-node-id="KpAjEpGmqQRJ1jMZTCtn3v">
+          <input type="range" id="dprimeRange" min="0.2" max="3" step="0.1" value="1" data-page-node-id="WMc8teu1Sk1x7Tj3BYCNrG">
+          <output id="dprimeVal" data-page-node-id="Bq3CbLhHEM6EnNyAY2TWyZ">1.0</output>
+        </div>
+        <div class="presets" data-page-node-id="EjdmGnSxq1GXwc7vCdcdJX">
+          <button class="preset" data-target="dprime" data-value="2" data-page-node-id="TIp7IZm7Ec8WsAELRqSNyf">轻松 2.0</button>
+          <button class="preset" data-target="dprime" data-value="1" data-page-node-id="9nPD1f1qV0308yAi8LrGV7">标准 1.0</button>
+          <button class="preset" data-target="dprime" data-value="0.5" data-page-node-id="Zo0hwIAZAEuR2C01oHuWR2">困难 0.5</button>
+        </div>
+        <p class="hint" id="dprimeEffHint" data-page-node-id="z8XTntlH0ChZLX7LP626Zi">理论上限 d′_eff ≈ 0.89</p>
+      </div>
+
+      <div class="param" data-page-node-id="xnTobY6GC3G4HwNTCdWfEh">
+        <label for="psRange" data-page-node-id="AZzUdHg7ek7VrDT9sVWGJZ">先验概率 P(S) —— 他有多大比例在骗人</label>
+        <div class="row" data-page-node-id="H4JeTZFvAE2ZWvsMgvgiE1">
+          <input type="range" id="psRange" min="0.1" max="0.9" step="0.05" value="0.5" data-page-node-id="39BQ5XnR9sFQ9QbhL9gyOK">
+          <output id="psVal" data-page-node-id="tKgEHz1DFTDC6cIZOBG7uG">0.50</output>
+        </div>
+        <div class="presets" data-page-node-id="PPA11RepJ7XHk8rT2fPtCM">
+          <button class="preset" data-target="pSignal" data-value="0.2" data-page-node-id="DzTTlsf7krNqfx1tTOGHEg">少骗 0.2</button>
+          <button class="preset" data-target="pSignal" data-value="0.5" data-page-node-id="ke7FicMqyI5WcYDgW2sp74">对半 0.5</button>
+          <button class="preset" data-target="pSignal" data-value="0.8" data-page-node-id="CDgPP8EGwfkVLJBVanNLgf">多骗 0.8</button>
+        </div>
+        <p class="hint" data-page-node-id="UbCKZkdR2JRAxEFeirhq5H">先验不改变破绽的清晰度，只改变「该不该怀疑」的成本账。</p>
+      </div>
+
+      <div class="param" data-page-node-id="rC3YTdXlyutoeX3e4olPG8">
+        <label for="trialsSel" data-page-node-id="nVrWfc5rGnkvvPNDINjWfR">每局试次数</label>
+        <select id="trialsSel" data-page-node-id="LOiE6CcqZz0FBAAEyzPzv8">
+          <option value="20" data-page-node-id="KD0urn6mowlctupUrG9dnA">20 试次</option>
+          <option value="40" selected data-page-node-id="6tW7F1gkEmXQo9K8IhVIom">40 试次（推荐）</option>
+          <option value="60" data-page-node-id="FouFwGh3yVrSwDdVy8D1Fe">60 试次</option>
+        </select>
+        <p class="hint" data-page-node-id="HoYbHAUOxfyhnxKrZ4vCK0">试次越多，估出来的 d′ 与 c 越稳。</p>
+      </div>
+
+      <div class="param" data-page-node-id="HfT0zXrO4QdikNiBznQoVK">
+        <label for="limitSel" data-page-node-id="x8HPeX1MqtUtdAJK5Dm8RD">观察窗限时</label>
+        <select id="limitSel" data-page-node-id="ODSH0mfpNXM1PVMLUszB1j">
+          <option value="0" data-page-node-id="RUf7OvEpeeAypi6KPu3jGR">不限时</option>
+          <option value="3000" selected data-page-node-id="kNe8P4ybvF3lBYy4NbrHGU">3 秒</option>
+          <option value="5000" data-page-node-id="8yhEhtiEHYphEMu9SMrn48">5 秒</option>
+        </select>
+        <p class="hint" data-page-node-id="bgH3AukXiuhRFFjR3CMbVI">超时未作答按「相信」计入，并在记录里标记为超时。</p>
+      </div>
+
+      <div class="param" data-page-node-id="AWHWCsBIw0UYDxLH2GQikq">
+        <label class="chk" data-page-node-id="e7h9bgA4MZFOZF2UyLV7A5"><input type="checkbox" id="confChk" data-page-node-id="cv9NYzidIZ85LOXUe756Fc"> 开启置信度评分</label>
+        <p class="hint" data-page-node-id="HOuP93YTcN8snurPY2S53f">开启后每次判断要多答一次「高 / 低置信」，结算时才能画出<b data-page-node-id="UFEVD19RYtSzyxezg693P7">经验 ROC</b>。</p>
+      </div>
+    </div>
+
+    <details class="calib" open data-page-node-id="newCalib">
+      <summary data-page-node-id="newCalibSum">先校准眼睛：破绽强度对照表（点开 / 收起）</summary>
+      <canvas id="calibCanvas" data-page-node-id="newCalibCv"></canvas>
+      <p class="hint" data-page-node-id="newCalibHint">
+        这六个是<b data-page-node-id="newCalibB1">同一个人的同一处</b>，唯一的区别是引擎给出的呈现强度 <code data-page-node-id="newCalibCode">tell</code>
+        —— 也就是画面要显示的那个数。左端最镇定，右端最可疑。
+        真局里每一轮的破绽都会落在这条尺上的某处。你的任务不是找"有没有破绽"，
+        而是读它<b data-page-node-id="newCalibB2">偏到了哪一边、偏了多少</b>。
+        注意：这个人<b data-page-node-id="newCalibB3">永远带着一丝不自然</b>，哪怕他在说实话 —— 这正是信号检测论说的"噪声里找信号"。
+      </p>
+    </details>
+
+    <div class="actions" data-page-node-id="MJmtyTxNISGvLOHxmbzZ8x">
+      <button id="btnStart" class="btn btn-primary" data-page-node-id="o93QE2wtenpyTXSUGnrKOS">进入酒馆</button>
+      <button id="btnTutorial" class="btn" data-page-node-id="r4q286LDhtcBSZPwzqjHNv">先看 2 试次教程</button>
+    </div>
+  </div>
+</section>
+
+<!-- ══ ② 规则 ════════════════════════════════════════ -->
+<section id="screen-rules" class="screen" data-page-node-id="vNSnFPWnK8Hjsu4vIZI6FS">
+  <div class="panel" data-page-node-id="0vZx1SSK1VA4Caqkm8GYQD">
+    <h1 data-page-node-id="UFwqvqY4jcYlXJUSsHyGip">四种结果，都写在酒馆的账上</h1>
+    <p class="lede" data-page-node-id="Tnmjf6jonMEDmgHEUuVnLQ">
+      客观世界只有两种状态：他在说谎（信号 S），或者他说实话（噪音 N）。
+      你只有两种反应：喊「你骗人」（报有信号），或者信他（报无信号）。
+      两者交叉，就是信号检测论的四格表。
+    </p>
+
+    <div class="rule-table" data-page-node-id="Vm9Brzg3NVDkMeRdyEvL61">
+      <div class="cm cm-head" data-page-node-id="jqCNH7Vu6ug5NFHwxlqXMs"></div>
+      <div class="cm cm-head" data-page-node-id="HscZaKiPyV39jxBR3iaJg4">你喊「你骗人」</div>
+      <div class="cm cm-head" data-page-node-id="3UTx3qWyIbsmYMdzClYOuw">你说「相信他」</div>
+
+      <div class="cm cm-rowlab" data-page-node-id="MKQroF6xe3vcBAXT48oWPx">他在说谎（S）</div>
+      <div class="cm cm-cell cm-hit" data-page-node-id="lndhEmQl8hXSDgIPADJQHz"><span data-page-node-id="hzA6q3jgTEGNegelA86GsJ">H 命中</span><b data-page-node-id="jDhgPlvpLXqp8urFUaYpGx">抓到了</b><i data-page-node-id="GKugo0jOHIORxGzhDBj1As">当场揭穿，对手喝罚酒，你 +1</i></div>
+      <div class="cm cm-cell cm-miss" data-page-node-id="Yv3WHSl5h6XQpC0Tuba3L1"><span data-page-node-id="hBLABZgaaELVCPTp7mdIAA">M 漏报</span><b data-page-node-id="ayXcUIxtfzKJXRsBFkCUlZ">被他骗了</b><i data-page-node-id="COw6x342oouFAuMoaSfEDi">谎言从你眼皮底下过去，你 −1</i></div>
+
+      <div class="cm cm-rowlab" data-page-node-id="wz4IzhzApGg0m1hUIyQ64G">他说实话（N）</div>
+      <div class="cm cm-cell cm-fa" data-page-node-id="wC2UFaKn9C9DJZ8vCtsRT1"><span data-page-node-id="odZWFGCiMvDJ59O0L2fYLd">FA 虚报</span><b data-page-node-id="vhXhfjXWe3eM8kgAvsjDjq">冤枉好人</b><i data-page-node-id="OBsXRefQdGbiJrlKwqpUvW">牌翻开是真的，你 −1</i></div>
+      <div class="cm cm-cell cm-cr" data-page-node-id="CfTD95EV8Xdf8Q02zg2XDC"><span data-page-node-id="U3vMkYzJCYF5KAx3cWPoPG">CR 正确拒绝</span><b data-page-node-id="mtd4keK1yx2YgXHbdZSbOM">稳稳跟牌</b><i data-page-node-id="DxbHOsiLrb9RJwML6MV0Bp">什么都没发生，你 +1</i></div>
+    </div>
+
+    <h2 data-page-node-id="uINcrpAS3ej4S45j8lTvFR">结算时会算这几个量</h2>
+    <div class="formula-box" data-page-node-id="SefaAG3hLICdmrnwa3ZMgf">
+      <p data-page-node-id="H0HAKLYtTGWzX8fG937lZG"><code data-page-node-id="Qu3Cb5XVOxH26CknYYBTSi">命中率 p(H) = H / (H + M)</code>　　<code data-page-node-id="vYW3XIQpqzNPEm2YKsdFV4">虚报率 p(FA) = FA / (FA + CR)</code></p>
+      <p data-page-node-id="CE9vv3Xd97y8gjrJyieNqA"><code data-page-node-id="tFiW0VfO201ujHkV4SIP1v">辨别力 d′ = z(p(H)) − z(p(FA))</code>　　<span class="fnote" data-page-node-id="Cd6quPIPx5nLa64h0r0v2j">z 是标准正态的逆累积分布 Φ⁻¹</span></p>
+      <p data-page-node-id="OcE94TNaTdE56xx2AMFHk2"><code data-page-node-id="7z1ZIGQ4RtbeKwRg8bCy1y">判断门槛 c = −0.5 · [ z(p(H)) + z(p(FA)) ]</code>　　<span class="fnote" data-page-node-id="BSah5IKdiXP3eCdUhSuSuA">c &gt; 0 保守，c &lt; 0 激进</span></p>
+      <p data-page-node-id="siSRTU8KjI4ru3SH1HKThP"><code data-page-node-id="XXMZanwQwRCBMzbRViwn91">似然比 β = exp(c · d′)</code>　　<code data-page-node-id="Lwt0JLB2syT1RaF1QXuHr7">准确率 = (H + CR) / 总试次</code></p>
+    </div>
+    <p class="hint" data-page-node-id="4kjQNbDFlWz7hADXtqsKEK">
+      d′ 衡量的是<b data-page-node-id="TD59pcIsTHcTKpwm3APkpA">你能不能分辨</b>，c 衡量的是<b data-page-node-id="NWQQWyiRNRFkywfyyUS4MM">你有多容易起疑</b>。
+      这两个数必须分开看：一个从不说「你骗人」的人和一个从不放过一个可疑眼神的人，
+      准确率可能一样，但 d′ 与 c 完全不同。
+    </p>
+    <p class="hint" data-page-node-id="WL9HIAy2sYidckLLwARJSE">
+      若某一格为 0（例如一局里一次都没虚报），p 会取到 0 或 1，z 值发散。
+      程序会自动改用 <b data-page-node-id="iNLKHGnSyO9j0pGF1FXWMc">log-linear 规则</b>（四格各加 0.5）修正，并在结算时明确标注 ——
+      不悄悄改你的数据。依据是 Hautus (1995) 的 5 万次蒙特卡洛比较：
+      log-linear 比常用的 1/(2N) 规则偏差更小。
+    </p>
+  </div>
+</section>
+
+<!-- ══ ③ 游戏 ════════════════════════════════════════ -->
+<section id="screen-game" class="screen" data-page-node-id="7DvS2gwZQfLjUHfEIKjo5u">
+  <div class="hud" data-page-node-id="pngAR8OHHF2ouB0y4zMzEs">
+    <span class="hud-item" data-page-node-id="nSj85JwC7ZPPhBrFI41Gpo">第 <b id="hudTrial" data-page-node-id="soUunfDkEvBF3eHoJDqcBa">1</b> / <b id="hudTotal" data-page-node-id="B0Rry2jcTeeptriA8Fg87v">40</b> 试次</span>
+    <span class="hud-item" data-page-node-id="B5ZtLacYYCKORboM75d1t6">得分 <b id="hudScore" data-page-node-id="9mkVmCOtBsO87CEAgVAWMc">0</b></span>
+    <span class="hud-item hud-params" id="hudParams" data-page-node-id="sOMgc0oEDhvGoO2BpFdRlH"></span>
+  </div>
+
+  <div class="stage-wrap" data-page-node-id="O5V6Cp4iyAAG4OeVTUiuKB">
+    <canvas id="stage" width="880" height="550" data-page-node-id="s8Zc7gJqDtE82UZjMEi2b1"></canvas>
+  </div>
+
+  <div class="dock" data-page-node-id="newDock">
+    <div class="answer-bar" data-page-node-id="hCuX2BgJufFoY7CVdIHeAW">
+      <button id="btnBelieve" class="btn btn-believe" disabled data-page-node-id="TaltsKJHpVm77e33rckvod">相信他 <kbd data-page-node-id="i8Qbscb2Y4XriaNAXrMw9e">J</kbd></button>
+      <button id="btnAccuse" class="btn btn-accuse" disabled data-page-node-id="CgQrAp7zZfrxMOilJiUK3q">你骗人！ <kbd data-page-node-id="MK3SPcH5eFTK9xHIt9nyGp">K</kbd></button>
+    </div>
+
+    <div id="confidenceBar" class="confidence hidden" data-page-node-id="lxYsedLUbC1fWKIArl7zGQ">
+      <span data-page-node-id="QqLo6SPsmtrAAjGH9tTKFM">你有多确定？</span>
+      <button data-conf="1" data-page-node-id="Guwjb5eAF2mzcSh62NeDkx">低置信 <kbd data-page-node-id="nhzUMY9OmfVy7zP10ikFBJ">1</kbd></button>
+      <button data-conf="2" data-page-node-id="T7qKWMMoj59wKEA9lHTc4v">高置信 <kbd data-page-node-id="7MZZxRxkddpX56bdY5mN5A">2</kbd></button>
+    </div>
+  </div>
+
+  <div id="trialFeedback" class="feedback" data-page-node-id="kFnTdZPNL0mgm21qNlyXvm"></div>
+</section>
+
+<!-- ══ ④ 结算 ════════════════════════════════════════ -->
+<section id="screen-result" class="screen" data-page-node-id="G1Mzsupi9SG2cj8Z02Fvrz">
+  <div class="panel" data-page-node-id="TNYXHz4aAgG1BiaVjY7ba9">
+    <h1 id="resTitle" data-page-node-id="K1xyRBWUYTR07yZWJpE7cD">结算</h1>
+    <p class="lede" id="resParams" data-page-node-id="bwE2FE9pfX5UFowAz1vPhB"></p>
+
+    <div id="resMetrics" class="metric-grid" data-page-node-id="iqyUSVg7FDWFHucZqtOflA"></div>
+
+    <h2 data-page-node-id="cmSWW9GOS3M65FqtRjQmC9">混淆矩阵</h2>
+    <div id="resMatrix" class="rule-table small" data-page-node-id="6Vxs7OB0NjvRvY1lk5BXwr"></div>
+
+    <h2 data-page-node-id="2H8GXsiVLZW8xnGoX3HrGy">方法学备注</h2>
+    <div id="resNotes" data-page-node-id="lPAgGYycwpO7dwAkVGBJ7o"></div>
+
+    <p id="resSummary" class="summary" data-page-node-id="TqoJxak6zpSmhQrMhnhs7C"></p>
+
+    <h2 data-page-node-id="fbiFMHMqsrfCQ9YwoIrxlU">你的数据长什么样</h2>
+    <div class="chart-grid" data-page-node-id="05T6tcts4xZAples97G4wv">
+      <figure data-page-node-id="p9P60aBCIU3emN3VqC0MLz"><figcaption data-page-node-id="a4J61jBhYrbqCwtEYYZRWQ">信号 / 噪音双分布（按你本局的 d′ 与 c 绘制）</figcaption><canvas id="resDist" data-page-node-id="Og1eTnpg4KLnBC5W8SGoQx"></canvas></figure>
+      <figure data-page-node-id="LIIM7LZhm5YCHdOxSJhrfq"><figcaption data-page-node-id="zTthnZJYDODDjrDNLcbv26">ROC 曲线（点 = 你的实测工作点）</figcaption><canvas id="resRoc" data-page-node-id="DiFx4mPPVxkGGxQ4DLLn7h"></canvas></figure>
+    </div>
+    <figure class="full" data-page-node-id="HONXUyebgjwcPUXT50uy55">
+      <figcaption data-page-node-id="GF7GmSGfvfvKn1e8sBbDBV">经验心理测量函数：横轴是你看不到的内部证据 x，纵轴是你实际选择「揭穿」的比例。竖线是你反推出来的主观门槛。</figcaption>
+      <canvas id="resPsych" data-page-node-id="iQLbENiCNt4ZN8cklBXqO8"></canvas>
+    </figure>
+
+    <div class="actions" data-page-node-id="MYVCN6Qp4fbuO6LjlptGXG">
+      <button id="btnAgain" class="btn btn-primary" data-page-node-id="PYB1TTgpfpzDuhDgvuBGT4">再来一局</button>
+      <button id="btnBackSetup" class="btn" data-page-node-id="qEC1rIuTigphHGgGIsFnU8">改参数</button>
+      <button id="btnToHistory" class="btn" data-page-node-id="jUVNBgAV5SdHm8a91OhpgN">看历史</button>
+    </div>
+  </div>
+</section>
+
+<!-- ══ ⑤ 原理 ════════════════════════════════════════ -->
+<section id="screen-theory" class="screen" data-page-node-id="5jYMj6D01asyBAOkJCWSBT">
+  <div class="panel" data-page-node-id="v922usmWS9hJFmazy3x67q">
+    <h1 data-page-node-id="8JMHrdtcEiKiVgUFYkULdR">拖一拖，看看 d′ 和 c 到底在动什么</h1>
+    <p class="lede" data-page-node-id="9C6xKaqjg1lOO8fK02IVGc">
+      这是纯理论面板，跟你打得怎么样无关。拖动两条滑条，看两条正态分布怎么拉开、
+      门槛怎么切，以及命中率与虚报率怎么随之变化。
+    </p>
+
+    <div class="param-grid tight" data-page-node-id="T7UhSYZG2pH7P0biBETBes">
+      <div class="param" data-page-node-id="DOWQhrbbNUobvUMuGZmSyK">
+        <label for="thDprime" data-page-node-id="wEE8twLuCr8e0Y9KpICAvv">辨别力 d′</label>
+        <div class="row" data-page-node-id="EXsX4gFMuKFXAsX6n9LI0n">
+          <input type="range" id="thDprime" min="0.2" max="3" step="0.05" value="1" data-page-node-id="jjv0Y7tCCaXUMbMDpxyF53">
+          <output id="thDprimeVal" data-page-node-id="PIyFFXu7absStm9bKAH7XC">1.00</output>
+        </div>
+      </div>
+      <div class="param" data-page-node-id="4YWTvk7NKGFl9wRlNFIrCz">
+        <label for="thC" data-page-node-id="qcEvQJPHUvbimY8g9kZ25i">判断门槛 c</label>
+        <div class="row" data-page-node-id="ZRnclqefy3O17lliR1FWv4">
+          <input type="range" id="thC" min="-1.5" max="1.5" step="0.05" value="0" data-page-node-id="RmAbSexRHnqDIJe4XCJhsE">
+          <output id="thCVal" data-page-node-id="OUbHXrNCdC0iGQGKVt1HL6">0.00</output>
+        </div>
+      </div>
+      <div class="param" data-page-node-id="IWEA0eAjHBFOGicwMdn5SD">
+        <label for="thPSignal" data-page-node-id="cfc2Ep3tQuWAjWUdNH2MIZ">先验 P(S)（只影响最优门槛）</label>
+        <div class="row" data-page-node-id="oV3OsESk6tJd69QmODUJEn">
+          <input type="range" id="thPSignal" min="0.1" max="0.9" step="0.05" value="0.5" data-page-node-id="O0ByRxjgDrGCcECDcxHtd2">
+          <output id="thPSignalVal" data-page-node-id="HW9UKPx97z3APshbWhG4Ho">0.50</output>
+        </div>
+      </div>
+    </div>
+
+    <div class="metric-grid" data-page-node-id="xjA0KQAiIOGngIphqsezHX">
+      <div class="metric" data-page-node-id="rQwfdX9N7sJfDR5jQGToVf"><p class="metric-label" data-page-node-id="RL3aDIvpJoGFh7Z6eMC0db">理论命中率 p(H)</p><p class="metric-value" id="thPH" data-page-node-id="bpAO9nCoEChw8vGi5ocp44">0.691</p></div>
+      <div class="metric" data-page-node-id="OAICLg2AFFfD2Zc8cleber"><p class="metric-label" data-page-node-id="Qzd1zWCj1PNBJ92PbgNfRi">理论虚报率 p(FA)</p><p class="metric-value" id="thPFA" data-page-node-id="dHgCB9OizueyxhhZCGBPj8">0.309</p></div>
+      <div class="metric" data-page-node-id="SSrPBhzFRRLW7Mg8qJONQL"><p class="metric-label" data-page-node-id="Y4hCOdsXEQY0Xo5qAZnnzX">门槛位置 x_c</p><p class="metric-value" id="thXC" data-page-node-id="eDrU54rDWSxxGZPbonuDbt">0.50</p></div>
+      <div class="metric" data-page-node-id="DhW1cA2RBEdTmH8WnTUCUP"><p class="metric-label" data-page-node-id="QF0dQtXurlc8jIex8UEwD4">似然比 β</p><p class="metric-value" id="thBeta" data-page-node-id="O1ASmqKGCk0FYwAGdWwaAq">1.00</p></div>
+      <div class="metric wide" data-page-node-id="apd8Ppv2WO97sY6Bf0YbuQ"><p class="metric-label" data-page-node-id="PniDfSzoUySAk81wWgLIx4">对称收益下的最优门槛</p><p class="metric-value" id="thOpt" data-page-node-id="VNXcW5IDH2ASeqv2wW8B7E">c_opt ≈ 0.00</p></div>
+    </div>
+
+    <div class="chart-grid" data-page-node-id="YXjNiDXok7FuYE6XCXOSQn">
+      <figure data-page-node-id="ik5SOQRSQYCDwEtiUNn1u0"><figcaption data-page-node-id="roZHjmlfzxLPVmEJ1bJhju">信号 / 噪音双分布</figcaption><canvas id="thDist" data-page-node-id="aj0KvQBcS9xL1QQbj8GLPr"></canvas></figure>
+      <figure data-page-node-id="61AluEDekMTtkioRkfNa2I"><figcaption data-page-node-id="ZljDh1E4zXB1TaNYBP0fGT">ROC 曲线</figcaption><canvas id="thRoc" data-page-node-id="R2oYvWEt34GEsQEYvmL4AD"></canvas></figure>
+    </div>
+
+    <p class="hint" data-page-node-id="dpcm6zt2KzlRUrdodn3Vsx">
+      门槛往右挪 = 更保守，你要看到更多可疑才会开口；c = 0 时门槛恰好落在两条分布的中点，
+      β = 1，不偏不倚。d′ 增大 = 两条分布拉开，同样的门槛下命中率上升、虚报率下降，
+      ROC 曲线整体往上凸 —— 这就是为什么 d′ 才是真正的「能力」指标。
+    </p>
+    <p class="hint" data-page-node-id="bFFsAxsFJOKZUugm2YVGoM">
+      最优门槛那一栏来自贝叶斯决策：在「判对 +1 / 判错 −1」的对称收益下，
+      β_opt = P(N)/P(S)，于是 c_opt = ln[P(N)/P(S)] / d′。
+      谎话率一高，理性策略就该变得更爱怀疑 —— 这个数会自动往负方向走。
+    </p>
+  </div>
+</section>
+
+<!-- ══ ⑥ 历史 ════════════════════════════════════════ -->
+<section id="screen-history" class="screen" data-page-node-id="PvMxqd3uPvbXOpHAetrqKM">
+  <div class="panel" data-page-node-id="jScb8GoQUkCDCekN03xVyY">
+    <h1 data-page-node-id="2XupJcgrsNWaPpMC3tyLCs">打过的局</h1>
+    <p class="lede" data-page-node-id="BLCDeDUfXKFwvGhNfpH9NL">记录存在本机浏览器里（localStorage），换台机器就没了。不上传、不联网。</p>
+    <p id="histBest" class="summary" data-page-node-id="xL80z4J0dY0QTpaiPZpGN6"></p>
+    <div class="table-wrap" data-page-node-id="FqtCLnA9sfNn4srXkJpbkn">
+      <table class="hist" data-page-node-id="R6VMRF8PVIUHD90Swfx6Af">
+        <thead data-page-node-id="x8YfSkWi8SL7lHvA1bkh9L">
+          <tr data-page-node-id="xJRUcztPTQccMbn3MpUFe0">
+            <th data-page-node-id="ydhrliXawqRUTruNbiotY1">#</th><th data-page-node-id="PjrWGCfUyJIB97ZQHSZizJ">时间</th><th data-page-node-id="zSWGN8BX9A36tDMfjWCl73">真实 d′</th><th data-page-node-id="6g8g1GPZ6EeLtR5V1EZIRp">P(S)</th><th data-page-node-id="ddQLddFT68n5i8FfwdgqF2">试次</th><th data-page-node-id="yRnEZ10psHp83i5pg27IMW">限时</th>
+            <th data-page-node-id="AUi1OaCb33l9DTZbTkPFWX">p(H)</th><th data-page-node-id="Dr9FmAK7f3jgr2IYCUsR5k">p(FA)</th><th data-page-node-id="iv1UAlP4v6qJRG4g93FLp5">估计 d′</th><th data-page-node-id="JJtaMfcDCNTR6PQd60eFTy">c</th><th data-page-node-id="qKZE7WxZ1ceGp9KlCFKiwS">准确率</th>
+          </tr>
+        </thead>
+        <tbody id="histBody" data-page-node-id="bywij2A5e6LYAVQLJYcnGc"></tbody>
+      </table>
+    </div>
+    <div class="actions" data-page-node-id="Lzlih0JiCEEHNlkU0AmJ5y">
+      <button id="btnClearHist" class="btn btn-danger" data-page-node-id="3BAGOFDKHtZEYV8LQnr90A">清空历史</button>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="foot" data-page-node-id="fqA5CIAE36Z70goZWyeaek">
+  课程作业 · 信号检测论交互式实验　原型参考 Liar's Bar（Curve Animation, 2024）　本页纯前端、无外部依赖
+</footer>
+
+<!-- 按依赖顺序加载；全部是传统 script，不用 ES module，
+     这样双击 index.html（file:// 协议）也能直接跑，不会被 CORS 拦。 -->
+<script src="js/rng.js"></script>
+<script src="js/stats.js"></script>
+<script src="js/params.js"></script>
+<script src="js/engine.js"></script>
+<script src="js/render.js"></script>
+<script src="js/charts.js"></script>
+<script src="js/audio.js"></script>
+<script src="js/history.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>

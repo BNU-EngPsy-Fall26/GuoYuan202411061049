@@ -1,0 +1,306 @@
+/**
+ * layout.css —— 页面骨架与各屏布局。
+ * 结构相关的放这里，配色与组件外观在 theme.css。
+ */
+
+/* ── 顶栏 ─────────────────────────────────────────── */
+.topbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 24px;
+  border-bottom: 1px solid var(--line);
+  background: rgba(10, 8, 6, 0.72);
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  backdrop-filter: blur(6px);
+}
+.brand-title {
+  font-family: var(--serif);
+  font-size: 19px;
+  color: var(--lamp-hi);
+  letter-spacing: 1px;
+}
+.brand-sub {
+  font-size: 12px;
+  color: var(--fg-faint);
+  margin-left: 10px;
+}
+.nav { display: flex; align-items: center; gap: 6px; }
+.navbtn {
+  appearance: none;
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--fg-faint);
+  font-family: inherit;
+  font-size: 13px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: all .15s;
+}
+.navbtn:hover { color: var(--lamp-hi); }
+.navbtn.on { color: var(--lamp-hi); border-color: var(--line-2); background: rgba(224,168,60,.08); }
+.sound { font-size: 12px; color: var(--fg-faint); margin-left: 10px; cursor: pointer; }
+
+/* ── 屏幕切换 ─────────────────────────────────────── */
+#app { max-width: 1000px; margin: 0 auto; padding: 26px 20px 60px; }
+.screen { display: none; }
+.screen.active { display: block; animation: fade .25s ease; }
+@keyframes fade { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+.panel {
+  background: rgba(22, 17, 12, 0.62);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  padding: 30px 32px;
+}
+.lede { color: var(--fg-dim); font-size: 14px; line-height: 1.85; margin-bottom: 22px; }
+.hint { font-size: 12px; color: var(--fg-faint); line-height: 1.7; }
+.fnote { font-size: 12px; color: var(--fg-faint); }
+
+/* ── 参数面板 ─────────────────────────────────────── */
+.param-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 22px 26px;
+}
+.param-grid.tight { gap: 18px 26px; }
+.param label {
+  display: block;
+  font-size: 13px;
+  color: var(--fg-dim);
+  margin-bottom: 8px;
+}
+.param .row { display: flex; align-items: center; gap: 14px; }
+.presets { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
+.param .hint { margin-top: 8px; margin-bottom: 0; }
+.chk { display: flex; align-items: center; gap: 8px; }
+
+.actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 26px; }
+
+/* ── 规则 / 结算里的四格表 ────────────────────────── */
+.rule-table {
+  display: grid;
+  grid-template-columns: 118px 1fr 1fr;
+  gap: 8px;
+  margin: 6px 0 8px;
+}
+.rule-table.small { grid-template-columns: 100px 1fr 1fr; }
+.cm { padding: 12px 14px; border-radius: var(--r-sm); }
+.cm-head { font-size: 12px; color: var(--fg-faint); text-align: center; padding: 4px; }
+.cm-rowlab {
+  display: flex; align-items: center;
+  font-size: 13px; color: var(--fg-dim);
+}
+.cm-cell { border: 1px solid var(--line); }
+.cm-cell span { display: block; font-size: 12px; color: var(--fg-faint); }
+.cm-cell b {
+  display: block; font-family: var(--serif); font-size: 20px;
+  font-weight: 500; margin: 2px 0; color: var(--paper);
+}
+.cm-cell i { display: block; font-style: normal; font-size: 12px; color: var(--fg-faint); }
+.cm-hit  { background: rgba(186, 117, 23, 0.16); border-color: rgba(186,117,23,.34); }
+.cm-cr   { background: rgba(55, 138, 221, 0.14); border-color: rgba(55,138,221,.32); }
+.cm-miss { background: rgba(239, 230, 212, 0.05); }
+.cm-fa   { background: rgba(239, 230, 212, 0.05); }
+
+.formula-box {
+  background: rgba(0, 0, 0, 0.22);
+  border: 1px solid var(--line);
+  border-radius: var(--r-sm);
+  padding: 14px 18px;
+  margin: 6px 0 14px;
+}
+.formula-box p { margin: 0 0 8px; }
+.formula-box p:last-child { margin-bottom: 0; }
+
+/* ── 开局页：破绽强度标定尺 ─────────────────────────── */
+.calib {
+  margin-top: 24px;
+  border: 1px solid var(--line);
+  border-radius: var(--r-sm);
+  background: rgba(0, 0, 0, 0.2);
+  padding: 12px 16px 6px;
+}
+.calib summary {
+  cursor: pointer;
+  font-size: 13px;
+  color: var(--lamp-hi);
+  list-style: none;
+  padding: 2px 0 10px;
+}
+.calib summary::-webkit-details-marker { display: none; }
+.calib summary::before { content: '▸ '; color: var(--fg-faint); }
+.calib[open] summary::before { content: '▾ '; }
+.calib[open] summary { padding-bottom: 12px; }
+#calibCanvas { display: block; border-radius: var(--r-sm); }
+.calib .hint { margin-top: 12px; }
+
+/* ── 游戏屏 ─────────────────────────────────────────────
+   整屏必须在一屏之内，不能出现滚动条。
+
+   为什么这条是硬要求而不是"看着舒服一点"：判断是否是被记为反应时的，
+   而反应时从观察窗开始计时。一旦玩家要滚动去找 J / K 按钮，那段滚动
+   时间就被算进了 RT，反应时数据立刻失真。所以游戏运行时把 body 的
+   滚动锁掉，画面高度按视口自适应，场景本身再按比例缩放去填空。      */
+body.playing { overflow: hidden; }
+body.playing .foot { display: none; }
+body.playing #app { max-width: 1240px; padding: 10px 20px 12px; }
+body.playing .topbar { padding: 8px 24px; }
+body.playing .topbar .brand-sub { display: none; }
+
+#screen-game.active {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  height: calc(100vh - var(--top-h, 62px) - 22px);
+  height: calc(100dvh - var(--top-h, 62px) - 22px);
+  min-height: 360px;
+}
+#screen-game .hud { flex: 0 0 auto; margin-bottom: 0; }
+
+.stage-wrap {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+#stage { display: block; }
+
+.dock { flex: 0 0 auto; }
+.feedback {
+  flex: 0 0 auto;
+  margin-top: 0;
+  min-height: 0;
+  max-height: 21vh;
+  overflow-y: auto;
+}
+
+.hud {
+  display: flex; flex-wrap: wrap; gap: 18px; align-items: center;
+  padding: 8px 16px; margin-bottom: 14px;
+  border: 1px solid var(--line);
+  border-radius: var(--r-sm);
+  background: rgba(22, 17, 12, 0.55);
+  font-size: 13px; color: var(--fg-dim);
+}
+.hud b { font-family: var(--mono); color: var(--lamp-hi); font-weight: 500; }
+.hud-params { margin-left: auto; color: var(--fg-faint); }
+
+body.awaiting .stage-wrap { box-shadow: 0 0 0 2px rgba(224, 168, 60, 0.28); }
+
+.answer-bar { display: flex; gap: 18px; justify-content: center; }
+.confidence {
+  display: flex; gap: 10px; align-items: center; justify-content: center;
+  margin-top: 10px; font-size: 13px; color: var(--fg-dim);
+}
+.confidence.hidden { display: none; }
+/* 开启置信度后，这一行在非作答阶段保留占位但不可见 —— 否则每次出现／消失
+   都会把画面挤一下，岂不是在提示玩家"该答了"，也白白消耗视线。 */
+.confidence.pad { visibility: hidden; pointer-events: none; }
+.confidence button {
+  appearance: none; background: rgba(239,230,212,.05);
+  border: 1px solid var(--line-2); color: var(--fg);
+  font-family: inherit; font-size: 13px; padding: 6px 14px;
+  border-radius: var(--r-sm); cursor: pointer;
+}
+.confidence button:hover { border-color: var(--lamp); color: var(--lamp-hi); }
+
+.fb-desc { color: var(--fg-dim); }
+.fb-meta { display: block; font-size: 12px; color: var(--fg-faint); margin-top: 4px; }
+.fb-teach {
+  margin: 14px auto 0; max-width: 620px; text-align: left;
+  font-size: 13px; line-height: 1.8; color: var(--fg-dim);
+  background: rgba(224, 168, 60, 0.07);
+  border-left: 3px solid var(--lamp);
+  border-radius: 0 var(--r-sm) var(--r-sm) 0;
+  padding: 12px 16px;
+}
+
+/* ── 结算 / 指标 ──────────────────────────────────── */
+.metric-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(118px, 1fr));
+  gap: 12px;
+}
+.metric {
+  background: rgba(239, 230, 212, 0.045);
+  border-radius: var(--r-sm);
+  padding: 12px 14px;
+}
+.metric.wide { grid-column: span 2; }
+.metric-label { font-size: 12px; color: var(--fg-faint); margin: 0 0 4px; }
+.metric-value {
+  font-family: var(--mono); font-size: 22px; font-weight: 500;
+  color: var(--lamp-hi); margin: 0;
+}
+.metric.wide .metric-value { font-size: 17px; }
+
+.note {
+  font-size: 12.5px; color: var(--fg-faint); line-height: 1.75;
+  padding-left: 12px; border-left: 2px solid var(--line-2);
+  margin: 0 0 10px;
+}
+.summary {
+  background: rgba(224, 168, 60, 0.08);
+  border-left: 3px solid var(--lamp);
+  border-radius: 0 var(--r-sm) var(--r-sm) 0;
+  padding: 14px 18px; font-size: 14px; line-height: 1.8;
+  margin: 20px 0 0;
+}
+.empty { text-align: center; color: var(--fg-faint); padding: 18px; }
+
+/* ── 图表 ─────────────────────────────────────────── */
+.chart-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 22px;
+  margin-top: 8px;
+}
+figure { margin: 0; }
+figure.full { margin-top: 22px; }
+figcaption { font-size: 12px; color: var(--fg-faint); margin-bottom: 10px; line-height: 1.6; }
+canvas { display: block; }
+
+/* ── 历史表 ───────────────────────────────────────── */
+.table-wrap { overflow-x: auto; }
+table.hist {
+  width: 100%; border-collapse: collapse; font-size: 13px;
+}
+table.hist th {
+  text-align: left; font-weight: 500; color: var(--fg-faint);
+  font-size: 12px; padding: 8px 10px; border-bottom: 1px solid var(--line-2);
+  white-space: nowrap;
+}
+table.hist td {
+  padding: 8px 10px; border-bottom: 1px solid var(--line); color: var(--fg-dim);
+  white-space: nowrap;
+}
+table.hist td.num { text-align: right; font-family: var(--mono); }
+table.hist td.num b { font-weight: 500; }
+
+.foot {
+  text-align: center; font-size: 12px; color: var(--fg-faint);
+  padding: 0 20px 40px;
+}
+
+/* ── 窄屏 ─────────────────────────────────────────── */
+@media (max-width: 720px) {
+  h1 { font-size: 22px; }
+  .panel { padding: 22px 18px; }
+  .rule-table { grid-template-columns: 84px 1fr 1fr; }
+  .cm { padding: 10px; }
+  .bubble { right: 16px; top: 24px; font-size: 13px; }
+  .answer-bar { flex-direction: column; align-items: stretch; }
+  .metric.wide { grid-column: span 1; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .screen.active { animation: none; }
+  .bubble { transition: none; }
+}

@@ -1,0 +1,192 @@
+/**
+ * theme.css —— 设计令牌、基础排版、通用组件。
+ *
+ * 配色分两套，互不混用：
+ *   氛围色（暗黄 / 血红 / 墨绿 / 纸白）  → 场景、面板、按钮
+ *   数据色（蓝 #378ADD / 琥珀 #BA7517）  → 只出现在图表里
+ * 分开的理由：暗色场景上去画统计图表，用氛围色会糊成一片。
+ */
+
+:root {
+  /* 氛围色 */
+  --ink:      #0E0B08;
+  --wall:     #16110C;
+  --lamp:     #E0A83C;
+  --lamp-hi:  #F5D08A;
+  --blood:    #8E2B2B;
+  --blood-hi: #C0392B;
+  --felt:     #1B3A32;
+  --paper:    #EFE6D4;
+  --ink-text: #241C13;
+  --smoke:    #6B6255;
+
+  /* 数据色 */
+  --data-n:   #378ADD;
+  --data-s:   #BA7517;
+
+  /* 文字梯度 */
+  --fg:       #E7DCC8;
+  --fg-dim:   #CFC4AE;
+  --fg-faint: #8A7F6E;
+
+  /* 线条 */
+  --line:     rgba(239, 230, 212, 0.10);
+  --line-2:   rgba(239, 230, 212, 0.20);
+
+  --r-sm: 8px;
+  --r-md: 12px;
+  --r-lg: 16px;
+
+  --serif: "Noto Serif SC", "Source Han Serif SC", "Songti SC", "SimSun", Georgia, serif;
+  --sans: system-ui, -apple-system, "Segoe UI", "Microsoft YaHei", "PingFang SC", sans-serif;
+  --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, "Courier New", monospace;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background:
+    radial-gradient(120% 80% at 50% -10%, #241A11 0%, rgba(22,17,12,0) 60%),
+    var(--ink);
+  color: var(--fg);
+  font-family: var(--sans);
+  font-size: 14px;
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+/* ── 标题 ─────────────────────────────────────────── */
+h1 {
+  font-family: var(--serif);
+  font-size: 26px;
+  font-weight: 500;
+  color: var(--lamp-hi);
+  margin: 0 0 10px;
+  letter-spacing: 0.5px;
+}
+h2 {
+  font-family: var(--serif);
+  font-size: 17px;
+  font-weight: 500;
+  color: var(--lamp);
+  margin: 28px 0 12px;
+  padding-top: 16px;
+  border-top: 1px solid var(--line);
+}
+p { margin: 0 0 10px; }
+b { font-weight: 500; color: var(--lamp-hi); }
+
+code {
+  font-family: var(--mono);
+  font-size: 13px;
+  background: rgba(239, 230, 212, 0.07);
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  padding: 2px 7px;
+  color: var(--paper);
+}
+
+kbd {
+  font-family: var(--mono);
+  font-size: 11px;
+  border: 1px solid currentColor;
+  border-radius: 4px;
+  padding: 0 5px;
+  opacity: 0.65;
+  margin-left: 4px;
+}
+
+/* ── 按钮 ─────────────────────────────────────────── */
+.btn {
+  appearance: none;
+  background: transparent;
+  border: 1px solid var(--line-2);
+  color: var(--fg);
+  font-family: inherit;
+  font-size: 14px;
+  padding: 10px 20px;
+  border-radius: var(--r-sm);
+  cursor: pointer;
+  transition: border-color .15s, color .15s, background .15s;
+}
+.btn:hover:not(:disabled) {
+  border-color: var(--lamp);
+  color: var(--lamp-hi);
+  background: rgba(224, 168, 60, 0.08);
+}
+.btn:disabled { opacity: .38; cursor: not-allowed; }
+
+.btn-primary {
+  border-color: var(--lamp);
+  color: var(--lamp-hi);
+  background: rgba(224, 168, 60, 0.13);
+  font-weight: 500;
+}
+.btn-danger { border-color: rgba(192, 57, 43, .5); color: #E8A39C; }
+.btn-danger:hover { border-color: var(--blood-hi); background: rgba(192, 57, 43, .12); color: #F3C0B9; }
+
+.btn-believe { padding: 14px 34px; font-size: 15px; }
+.btn-accuse  {
+  padding: 14px 34px; font-size: 15px;
+  border-color: rgba(192, 57, 43, .45); color: #EFC0B9;
+}
+.btn-accuse:hover:not(:disabled) {
+  border-color: var(--blood-hi); color: #FFD9D2; background: rgba(192, 57, 43, .14);
+}
+
+/* 预设小按钮 */
+.preset {
+  appearance: none;
+  background: rgba(239, 230, 212, 0.05);
+  border: 1px solid var(--line);
+  color: var(--fg-dim);
+  font-family: inherit;
+  font-size: 12px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: all .15s;
+}
+.preset:hover { border-color: var(--lamp); color: var(--lamp-hi); }
+
+/* ── 表单控件 ─────────────────────────────────────── */
+input[type="range"] {
+  accent-color: var(--lamp);
+  width: 100%;
+  height: 20px;
+}
+input[type="checkbox"] { accent-color: var(--lamp); }
+output {
+  font-family: var(--mono);
+  font-size: 14px;
+  color: var(--lamp-hi);
+  min-width: 52px;
+  text-align: right;
+}
+select {
+  background: rgba(239, 230, 212, 0.05);
+  border: 1px solid var(--line-2);
+  color: var(--fg);
+  font-family: inherit;
+  font-size: 13px;
+  padding: 7px 10px;
+  border-radius: var(--r-sm);
+  width: 100%;
+}
+
+/* ── 标签 ─────────────────────────────────────────── */
+.tag {
+  display: inline-block;
+  font-size: 12px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  border: 1px solid currentColor;
+  margin-right: 8px;
+}
+.tag.ok  { color: var(--lamp-hi); }
+.tag.bad { color: #E8A39C; }

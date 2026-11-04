@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-page-node-id="XnSoj8XAwqs7cEtPJHlfcR">
+<head data-page-node-id="FjnRWdsaznGs9gv4djme4u">
+<meta charset="utf-8" data-page-node-id="hFZtE0kxBMKrw1zW0GZORR">
+<meta name="viewport" content="width=device-width,initial-scale=1" data-page-node-id="mhwol0jgaEy4Hc3CjO9Bh2">
+<title>实验三 · 姿态仪与 Malcolm Horizon</title>
+<link rel="stylesheet" href="css/style.css" data-page-node-id="9vwkejbRSvifQSv2CeCJdO">
+<link rel="icon" href="data:,">
+</head>
+<body data-page-node-id="35fZaD31nhUgzOUtxHs18a">
+<div class="wrap" data-page-node-id="L18EGgwxXhuwilXFpWC4O8">
+
+  <h1 data-page-node-id="GhJCVskbfllaB6OG5Q3I2r">实验三 · 姿态仪与 Malcolm Horizon</h1>
+  <div class="sub" data-page-node-id="u3gEA2di0cIWCWZMGM93QD">飞机会突然被"打歪"，你要尽快把它改回水平。三种显示格式，其中一半试次还要同时做一个数字小任务。全程约 8–10 分钟。</div>
+
+  <div class="card" id="intro" data-page-node-id="FKM3ahQN0qX8TRMDrFNtHZ">
+    <h2 style="margin-top:0" data-page-node-id="zTkfZ1Buh6JgF4sjsiN045">你要做的事</h2>
+    <ul data-page-node-id="tuPz0XQzHkqd5ohg1i3E4K">
+      <li data-page-node-id="RSRrV4qf1q9i1knEledKfO">屏幕中央是姿态仪（人工地平线）。飞机会先平飞 1.5–2.5 秒，然后<b data-page-node-id="zCRSfglJuLrERTK2nKkVfA">突然被打歪</b>（滚转最多 ±90°，俯仰 ±15°）。</li>
+      <li data-page-node-id="6tKhhW7Bl9IA9DFokzS8Ur">用方向键把飞机改回水平：<kbd data-page-node-id="DLYlTydoa7yBacTIkSyvVI">←</kbd> 向左压杆（减小右滚），<kbd data-page-node-id="BXkvSGTxKurcPx5A1FOp0s">→</kbd> 向右压杆；<kbd data-page-node-id="dLDgBL5nTdpV3wXDyugzcI">↑</kbd> 抬头，<kbd data-page-node-id="BRaEWCFxGwa2uwxWUpjVop">↓</kbd> 低头。</li>
+      <li data-page-node-id="jV8dbyxysXj1qjola1ykMb">当滚转和俯仰<b data-page-node-id="dIVCa6oFzKiaO7rsIu8OFL">都小于 5° 并保持 2 秒</b>，这一试次算成功。超过 12 秒算失败。</li>
+      <li data-page-node-id="hMxWEhZJsadZBTY4DLtbBI">一半的试次里，屏幕角落会每 2.5 秒闪一个数字，如果这个数字和<b data-page-node-id="oVHfgkaR2SvobFYOHYzkEs">上一个</b>相同，按 <kbd data-page-node-id="sSOf4oHCTXaMSoedquC6Xy">空格</kbd>。这是次要任务，但也要认真做。</li>
+    </ul>
+    <div class="warn" data-page-node-id="KaneDTLXCmXJOWLNt12GPb">
+      三种显示格式会随机混合出现，你不需要记住是哪一种，只管尽快改平：
+      <ol style="margin:6px 0 0" data-page-node-id="YIiB5VuuQaEbBXGAIOBTR1">
+        <li data-page-node-id="RxOSNPuc6eBdefMmX0S3qd"><b data-page-node-id="2TYU34QehJTvWCVj9GNfEj">格式 A</b>：地平线动，飞机符号固定在中间（现在民航最常用的 inside-out）。</li>
+        <li data-page-node-id="Kaji7tCu33YtqHBGCirLWg"><b data-page-node-id="Hz7IeqaJnL9TMmZXPINSSJ">格式 B</b>：飞机符号动，地平线固定（outside-in）。</li>
+        <li data-page-node-id="9cY57RK4RPNFxcTwWeVOn5"><b data-page-node-id="r78F3WkaejEaJmHV4DuFz2">格式 C</b>：和 A 一样，但额外有一条<b data-page-node-id="uAeElb6DVCb5nLhnSC1fst">贯穿整个屏幕的暗淡地平线光带</b>。</li>
+      </ol>
+    </div>
+    <div class="actions" data-page-node-id="HmUgNuqSw3bIQwfQsw4Aij">
+      <button id="btnStart" data-page-node-id="u7pDvrZ2YRfkeyT78AURiD">开始（先做 6 次练习）</button>
+    </div>
+  </div>
+
+  <div class="card hidden" id="stageCard" data-page-node-id="FKOjbNZu7zFgZ1yRBRjDMF">
+    <div class="hud" data-page-node-id="KyAV6EEO6pA2H2AAa4Vg39">
+      <span data-page-node-id="lTrsl7Fph3rl2O4kruHQh4">试次 <b id="hTrial" data-page-node-id="5NDalCyVFt01IzwiqJcULK">—</b></span>
+      <span data-page-node-id="sPNO2ybO7506xhqI3wyZVJ">格式 <b id="hCond" data-page-node-id="fFKR6CF5mRwFdcOCnxznJk">—</b></span>
+      <span data-page-node-id="DW8T7c5tBLLNfReGOhPwZw">次级任务 <b id="hDual" data-page-node-id="7ve954UyecJXUMbmbpLMAa">—</b></span>
+      <span id="hMsg" style="color:var(--acc)" data-page-node-id="18xfgKWOxIY7O4qv3Mzv3u"></span>
+    </div>
+    <div class="stage" data-page-node-id="VhdM7g7ezg0oU4FsUjYGMJ">
+      <canvas id="cv" width="900" height="560" data-page-node-id="tMWR7VcBegVi97KR6kUNVD"></canvas>
+    </div>
+    <p class="hint center" data-page-node-id="X4JHVmu0gRvgH1m3J69Crj">
+      <kbd data-page-node-id="mATGMUwGzsJUTECufSMCgu">←</kbd>左滚 · <kbd data-page-node-id="ajzOXQRmAgNYYpF8LlN9dI">→</kbd>右滚 · <kbd data-page-node-id="7QroWFhCkIy2yy0XcorNcL">↑</kbd>抬头 · <kbd data-page-node-id="39M8Qvpt9HwIjGGqHFOIAa">↓</kbd>低头　｜　次级任务：<kbd data-page-node-id="ARndYyqQmlYIYzgAVQM3Rf">空格</kbd>
+    </p>
+  </div>
+
+  <div class="card" id="result" data-page-node-id="zxyEHTR6d6NariFTPhd3OV"></div>
+
+</div>
+
+<script src="js/common.js"></script>
+<script src="js/analysis.js"></script>
+<script src="js/personal.js"></script>
+<script>
+(function () {
+  'use strict';
+  var HW = window.HW;
+  var sess = HW.requireSession();
+  if (!sess) return;
+
+  var COND = {
+    A: { id:'A', label:'inside-out（地平线动）' },
+    B: { id:'B', label:'outside-in（飞机符号动）' },
+    C: { id:'C', label:'inside-out + Malcolm Horizon' }
+  };
+
+  /* =========================================================
+     试次清单：3 格式 × 12 试次 = 36
+     每格式 6 试次带次级任务 / 6 试次不带
+     滚转 ±30/60/90，每格式每个量级各 2 次
+     ========================================================= */
+  var seed = HW.seedFrom(sess.id, 'attitude');
+  var rng = HW.makeRng(seed);
+
+  var trials = [];
+  ['A','B','C'].forEach(function (cid) {
+    var rolls = [];
+    [30,60,90].forEach(function (m) { rolls.push(m, -m, m, -m); });  /* 8 */
+    rolls = rng.shuffle(rolls).slice(0, 12);
+    /* 保证 ±30/60/90 各出现 2 次左右；不足则补齐 */
+    var need = [30,-30,60,-60,90,-90];
+    for (var i = 0; i < 12; i++) rolls[i] = need[i % 6];
+    rolls = rng.shuffle(rolls);
+    var duals = [true,true,true,true,true,true,false,false,false,false,false,false];
+    duals = rng.shuffle(duals);
+    for (var i = 0; i < 12; i++) {
+      trials.push({
+        cond: cid,
+        roll0: rolls[i],
+        pitch0: (rng() < 0.5 ? 15 : -15),
+        dual: duals[i],
+        levelDur: 1500 + rng() * 1000
+      });
+    }
+  });
+  trials = rng.shuffle(trials);
+  trials.forEach(function (t, i) { t.idx = i + 1; });
+
+  var practice = [];
+  ['A','B','C'].forEach(function (cid) {
+    for (var i = 0; i < 2; i++) {
+      practice.push({
+        cond: cid, roll0: (i % 2 ? 50 : -50), pitch0: (i % 2 ? 10 : -10),
+        dual: false, levelDur: 1500, practice: true
+      });
+    }
+  });
+  practice.forEach(function (t, i) { t.idx = i + 1; });
+
+  var queue = practice.concat(trials);
+  var qi = 0;
+  var startedAt = null;
+  var records = [];
+  var finished = false;
+
+  /* =========================================================
+     画布
+     ========================================================= */
+  var cv = document.getElementById('cv');
+  var ctx = cv.getContext('2d');
+  var W = cv.width, H = cv.height;
+  var CX = W / 2, CY = H / 2 - 10;
+  var R = 150;                 /* 姿态仪半径 */
+  var PXPD = 2.2;              /* 每度像素（俯仰） */
+
+  /* 当前状态 */
+  var st = {
+    roll: 0, pitch: 0,
+    phase: 'idle',             /* idle | level | recover | done */
+    t0: 0, perturbAt: 0,
+    keys: {},
+    firstInput: null,          /* {axis, dir, t} */
+    rollErrSq: 0, rollErrN: 0,
+    stableSince: 0,
+    digits: [],                /* {t, value, isRepeat, answered, correct} */
+    digitIdx: 0, prevDigit: null,
+    result: null
+  };
+
+  /* ---------- 绘制 ---------- */
+  function drawAI(roll, pitch, cond) {
+    var phi = roll * Math.PI / 180;
+
+    /* 背景 */
+    ctx.fillStyle = '#0d0f12';
+    ctx.fillRect(0, 0, W, H);
+
+    /* C 条件：先画贯穿全屏的 Malcolm Horizon 光带 */
+    if (cond === 'C') {
+      ctx.save();
+      ctx.beginPath(); ctx.rect(0, 0, W, H); ctx.clip();
+      var nx = Math.sin(phi), ny = Math.cos(phi);
+      var d = pitch * PXPD;
+      /* 地面半平面：p·n > d */
+      var px = -ny, py = nx;   /* 与 n 垂直的方向 */
+      var L = Math.sqrt(W*W + H*H);
+      var ox = CX + nx * d, oy = CY + ny * d;
+      ctx.beginPath();
+      ctx.moveTo(ox - px * L, oy - py * L);
+      ctx.lineTo(ox + px * L, oy + py * L);
+      ctx.lineTo(ox + px * L + nx * L, oy + py * L + ny * L);
+      ctx.lineTo(ox - px * L + nx * L, oy - py * L + ny * L);
+      ctx.closePath();
+      ctx.globalAlpha = 0.30;
+      ctx.fillStyle = '#6b5b3e';
+      ctx.fill();
+      ctx.globalAlpha = 0.22;
+      ctx.beginPath();
+      ctx.moveTo(ox - px * L, oy - py * L);
+      ctx.lineTo(ox + px * L, oy + py * L);
+      ctx.lineTo(ox + px * L - nx * L, oy + py * L - ny * L);
+      ctx.lineTo(ox - px * L - nx * L, oy - py * L - ny * L);
+      ctx.closePath();
+      ctx.fillStyle = '#2c3a4d';
+      ctx.fill();
+      /* 地平线本身 */
+      ctx.globalAlpha = 0.55;
+      ctx.strokeStyle = '#e8d9b0';
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.moveTo(ox - px * L, oy - py * L);
+      ctx.lineTo(ox + px * L, oy + py * L);
+      ctx.stroke();
+      /* 中央小标记指示"上" */
+      ctx.globalAlpha = 0.75;
+      ctx.fillStyle = '#e8d9b0';
+      ctx.beginPath();
+      ctx.moveTo(ox - ny * 16, oy + nx * 16);
+      ctx.lineTo(ox - px * 9 - ny * 34, oy - py * 9 + nx * 34);
+      ctx.lineTo(ox + px * 9 - ny * 34, oy + py * 9 + nx * 34);
+      ctx.closePath(); ctx.fill();
+      ctx.restore();
+    }
+
+    /* 姿态仪 */
+    ctx.save();
+    ctx.beginPath(); ctx.arc(CX, CY, R, 0, Math.PI * 2); ctx.clip();
+
+    if (cond === 'B') {
+      /* outside-in：地平线固定 */
+      ctx.fillStyle = '#2f4a63'; ctx.fillRect(CX - R, CY - R, 2 * R, R);   /* 天 */
+      ctx.fillStyle = '#7a5f3a'; ctx.fillRect(CX - R, CY, 2 * R, R);       /* 地 */
+      ctx.strokeStyle = '#f0f0f0'; ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.moveTo(CX - R, CY); ctx.lineTo(CX + R, CY); ctx.stroke();
+      /* 俯仰刻度（固定） */
+      ctx.strokeStyle = 'rgba(255,255,255,.35)'; ctx.lineWidth = 1;
+      [-20,-10,10,20].forEach(function (p) {
+        var y = CY - p * PXPD, w = (p % 20 === 0) ? 46 : 28;
+        ctx.beginPath(); ctx.moveTo(CX - w, y); ctx.lineTo(CX + w, y); ctx.stroke();
+      });
+      /* 飞机符号：随机体转动 + 随俯仰上下移动 */
+      ctx.save();
+      ctx.translate(CX, CY - pitch * PXPD);
+      ctx.rotate(phi);
+      drawAircraftSymbol('#ffd54a', 1.0);
+      ctx.restore();
+    } else {
+      /* inside-out（A 与 C 的中央仪表相同）：地平线动，飞机符号固定 */
+      var nx2 = Math.sin(phi), ny2 = Math.cos(phi);
+      var dd = pitch * PXPD;
+      var px2 = -ny2, py2 = nx2;
+      var L2 = 2 * R + 40;
+      var ox2 = CX + nx2 * dd, oy2 = CY + ny2 * dd;
+      ctx.beginPath();
+      ctx.moveTo(ox2 - px2 * L2, oy2 - py2 * L2);
+      ctx.lineTo(ox2 + px2 * L2, oy2 + py2 * L2);
+      ctx.lineTo(ox2 + px2 * L2 + nx2 * L2, oy2 + py2 * L2 + ny2 * L2);
+      ctx.lineTo(ox2 - px2 * L2 + nx2 * L2, oy2 - py2 * L2 + ny2 * L2);
+      ctx.closePath();
+      ctx.fillStyle = '#7a5f3a'; ctx.fill();     /* 地 */
+      ctx.beginPath();
+      ctx.moveTo(ox2 - px2 * L2, oy2 - py2 * L2);
+      ctx.lineTo(ox2 + px2 * L2, oy2 + py2 * L2);
+      ctx.lineTo(ox2 + px2 * L2 - nx2 * L2, oy2 + py2 * L2 - ny2 * L2);
+      ctx.lineTo(ox2 - px2 * L2 - nx2 * L2, oy2 - py2 * L2 - ny2 * L2);
+      ctx.closePath();
+      ctx.fillStyle = '#2f4a63'; ctx.fill();     /* 天 */
+      ctx.strokeStyle = '#f0f0f0'; ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(ox2 - px2 * L2, oy2 - py2 * L2);
+      ctx.lineTo(ox2 + px2 * L2, oy2 + py2 * L2);
+      ctx.stroke();
+      /* 俯仰刻度（随地平线移动） */
+      ctx.strokeStyle = 'rgba(255,255,255,.35)'; ctx.lineWidth = 1;
+      [-20,-10,10,20].forEach(function (p) {
+        var off = dd - p * PXPD;
+        var bx = CX + nx2 * off, by = CY + ny2 * off;
+        var w = (p % 20 === 0) ? 46 : 28;
+        ctx.beginPath();
+        ctx.moveTo(bx - px2 * w, by - py2 * w);
+        ctx.lineTo(bx + px2 * w, by + py2 * w);
+        ctx.stroke();
+      });
+      drawAircraftSymbol('#ffd54a', 1.0);
+    }
+    ctx.restore();
+
+    /* 仪表外框 + 滚转刻度 */
+    ctx.strokeStyle = '#98a2b3'; ctx.lineWidth = 3;
+    ctx.beginPath(); ctx.arc(CX, CY, R, 0, Math.PI * 2); ctx.stroke();
+    ctx.strokeStyle = 'rgba(255,255,255,.5)'; ctx.lineWidth = 2;
+    [0, 30, 60, 90, -30, -60].forEach(function (m) {
+      var a = -Math.PI / 2 + m * Math.PI / 180;
+      var r1 = R - 2, r2 = R - (m === 0 ? 18 : 12);
+      ctx.beginPath();
+      ctx.moveTo(CX + r1 * Math.cos(a), CY + r1 * Math.sin(a));
+      ctx.lineTo(CX + r2 * Math.cos(a), CY + r2 * Math.sin(a));
+      ctx.stroke();
+    });
+    /* 滚转指针（随机体转动的三角形，三种格式都有，作为构型参照） */
+    ctx.save();
+    ctx.translate(CX, CY);
+    ctx.rotate(-Math.PI / 2 - phi);
+    ctx.fillStyle = '#ffd54a';
+    ctx.beginPath();
+    ctx.moveTo(R - 26, 0); ctx.lineTo(R - 40, -8); ctx.lineTo(R - 40, 8);
+    ctx.closePath(); ctx.fill();
+    ctx.restore();
+  }
+
+  function drawAircraftSymbol(color, k) {
+    ctx.save();
+    ctx.strokeStyle = color; ctx.fillStyle = color; ctx.lineWidth = 4 * k;
+    ctx.beginPath(); ctx.moveTo(-62 * k, 0); ctx.lineTo(-20 * k, 0); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(20 * k, 0); ctx.lineTo(62 * k, 0); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(-20 * k, 0); ctx.lineTo(-8 * k, 10 * k); ctx.lineTo(8 * k, 10 * k); ctx.lineTo(20 * k, 0); ctx.stroke();
+    ctx.beginPath(); ctx.arc(0, 0, 4 * k, 0, Math.PI * 2); ctx.fill();
+    ctx.restore();
+  }
+
+  function drawDigit(t) {
+    if (!t || !t.dual) return;
+    var d = st.digits[st.digitIdx - 1];
+    ctx.save();
+    ctx.fillStyle = 'rgba(0,0,0,.6)';
+    ctx.fillRect(W - 150, 20, 130, 70);
+    ctx.strokeStyle = '#98a2b3'; ctx.lineWidth = 2;
+    ctx.strokeRect(W - 150, 20, 130, 70);
+    ctx.fillStyle = '#fff';
+    ctx.font = '600 13px -apple-system,"Microsoft YaHei",sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('数字任务', W - 85, 40);
+    if (d) {
+      ctx.font = '700 34px ui-monospace,Consolas,monospace';
+      ctx.fillStyle = '#ffd54a';
+      ctx.fillText(String(d.value), W - 85, 78);
+    } else {
+      ctx.font = '600 14px -apple-system,"Microsoft YaHei",sans-serif';
+      ctx.fillStyle = '#667085';
+      ctx.fillText('—', W - 85, 76);
+    }
+    ctx.restore();
+  }
+
+  /* =========================================================
+     主循环
+     ========================================================= */
+  var cur = null;
+  var raf = null;
+
+  function startTrial(t) {
+    cur = t;
+    st.roll = 0; st.pitch = 0;
+    st.phase = 'level';
+    st.t0 = HW.now();
+    st.perturbAt = st.t0 + t.levelDur;
+    st.firstInput = null;
+    st.rollErrSq = 0; st.rollErrN = 0;
+    st.stableSince = 0;
+    st.digits = [];
+    st.digitIdx = 0;
+    st.prevDigit = null;
+    st.result = null;
+    st.nextDigitAt = st.perturbAt;        /* 次级任务从扰动开始 */
+    document.getElementById('hTrial').textContent =
+      (t.practice ? '练习 ' : '') + (t.idx) + (t.practice ? '' : ' / ' + trials.length);
+    document.getElementById('hCond').textContent = COND[t.cond].label;
+    document.getElementById('hDual').textContent = t.dual ? '有（重复按空格）' : '无';
+    document.getElementById('hMsg').textContent = '';
+    if (raf) cancelAnimationFrame(raf);
+    raf = requestAnimationFrame(loop);
+  }
+
+  function loop() {
+    if (!cur) return;
+    var now = HW.now();
+    var el = now - st.t0;
+
+    /* 扰动 */
+    if (st.phase === 'level' && now >= st.perturbAt) {
+      st.phase = 'recover';
+      st.roll = cur.roll0;
+      st.pitch = cur.pitch0;
+      st.recoverStart = now;
+      document.getElementById('hMsg').textContent = '改平！';
+    }
+
+    /* 控制输入 */
+    var dt = 16.7;
+    if (st.phase === 'recover') {
+      var dr = 0, dp = 0;
+      if (st.keys.ArrowLeft) dr -= 1;
+      if (st.keys.ArrowRight) dr += 1;
+      if (st.keys.ArrowUp) dp += 1;
+      if (st.keys.ArrowDown) dp -= 1;
+      if (dr || dp) {
+        if (!st.firstInput) {
+          st.firstInput = {
+            axis: dr ? 'roll' : 'pitch',
+            dir: dr ? dr : dp,
+            t: (now - st.recoverStart)
+          };
+        }
+        st.roll += dr * 45 * (dt / 1000);
+        st.pitch += dp * 20 * (dt / 1000);
+        st.roll = HW.clamp(st.roll, -180, 180);
+        st.pitch = HW.clamp(st.pitch, -60, 60);
+      }
+      st.rollErrSq += st.roll * st.roll; st.rollErrN++;
+
+      if (Math.abs(st.roll) < 5 && Math.abs(st.pitch) < 5) {
+        if (!st.stableSince) st.stableSince = now;
+        if (now - st.stableSince >= 2000) endTrial(true, now - st.recoverStart);
+      } else st.stableSince = 0;
+
+      if (now - st.recoverStart > 12000) endTrial(false, null);
+    }
+
+    /* 次级任务数字流 */
+    if (cur.dual && st.phase === 'recover' && now >= st.nextDigitAt) {
+      var isRep = st.prevDigit !== null && Math.random() < 0.35;
+      var v = isRep ? st.prevDigit : Math.floor(Math.random() * 10);
+      st.digits.push({ t: now - st.recoverStart, value: v, isRepeat: isRep, answered: false, correct: null });
+      st.digitIdx = st.digits.length;
+      st.prevDigit = v;
+      st.nextDigitAt = now + 2500;
+      setTimeout(function () { st.digitIdx = 0; }, 1200);   /* 显示 1.2 s 后隐藏 */
+    }
+
+    drawAI(st.roll, st.pitch, cur.cond);
+    drawDigit(cur);
+
+    if (st.phase === 'recover') {
+      ctx.save();
+      ctx.fillStyle = 'rgba(255,255,255,.75)';
+      ctx.font = '600 14px -apple-system,"Microsoft YaHei",sans-serif';
+      ctx.textAlign = 'left';
+      ctx.fillText('滚转 ' + Math.round(st.roll) + '°　俯仰 ' + Math.round(st.pitch) + '°', 20, 34);
+      ctx.restore();
+    }
+
+    if (st.phase === 'recover' || st.phase === 'level') raf = requestAnimationFrame(loop);
+  }
+
+  function endTrial(success, recoveryMs) {
+    st.phase = 'done';
+    var reversal = null, axis = null;
+    if (st.firstInput) {
+      axis = st.firstInput.axis;
+      var v = axis === 'roll' ? st.roll : st.pitch;
+      var init = axis === 'roll' ? cur.roll0 : cur.pitch0;
+      /* 反向 = 首次输入使偏差进一步加大（sign(input) == sign(初始偏差)） */
+      reversal = (Math.sign(st.firstInput.dir) === Math.sign(init));
+    }
+    var rec = {
+      cond: cur.cond,                                      /* 内部分析用（A/B/C） */
+      cond_full: cur.cond + (cur.dual ? '_dual' : '_single'),  /* 接口用：条件含双任务标记 */
+      rt: st.firstInput ? Math.round(st.firstInput.t) : null,  /* 接口标准键 */
+      correct: !!success,                                      /* 接口标准键 */
+      condLabel: COND[cur.cond].label,
+      trialIdx: cur.idx,
+      practice: !!cur.practice,
+      dual: !!cur.dual,
+      roll0: cur.roll0,
+      pitch0: cur.pitch0,
+      success: !!success,
+      recovery_ms: recoveryMs ? Math.round(recoveryMs) : null,
+      firstInput_latency_ms: st.firstInput ? Math.round(st.firstInput.t) : null,
+      firstInput_axis: axis,
+      reversal: reversal,
+      roll_rms: st.rollErrN ? Math.round(Math.sqrt(st.rollErrSq / st.rollErrN) * 10) / 10 : null,
+      dualTargets: st.digits.filter(function (d) { return d.isRepeat; }).length,
+      dualHits: st.digits.filter(function (d) { return d.isRepeat && d.answered; }).length,
+      dualFalseAlarms: st.digits.filter(function (d) { return !d.isRepeat && d.answered; }).length,
+      dualShown: st.digits.length
+    };
+    if (!cur.practice) records.push(rec);
+
+    document.getElementById('hMsg').textContent = success ? '成功 ✓' : '超时 ✗';
+    document.getElementById('hMsg').style.color = success ? 'var(--ok)' : 'var(--bad)';
+
+    setTimeout(function () {
+      qi++;
+      if (qi >= queue.length) { finish(); return; }
+      startTrial(queue[qi]);
+    }, cur.practice ? 900 : 700);
+  }
+
+  /* ---------- 输入 ---------- */
+  document.addEventListener('keydown', function (e) {
+    if (['ArrowLeft','ArrowRight','ArrowUp','ArrowDown',' '].indexOf(e.key) >= 0) e.preventDefault();
+    if (e.key === ' ' && cur && cur.dual && st.phase === 'recover' && st.digits.length) {
+      var d = st.digits[st.digits.length - 1];
+      if (!d.answered) { d.answered = true; d.correct = d.isRepeat; }
+    }
+    st.keys[e.key] = true;
+  });
+  document.addEventListener('keyup', function (e) { st.keys[e.key] = false; });
+
+  /* =========================================================
+     结束与统计
+     ========================================================= */
+  function condStats(cid, dualOnly) {
+    var rs = records.filter(function (r) { return r.cond === cid && (dualOnly === undefined || r.dual === dualOnly); });
+    if (!rs.length) return null;
+    var rev = rs.filter(function (r) { return r.reversal === true; }).length;
+    var revN = rs.filter(function (r) { return r.reversal !== null; }).length;
+    var lat = rs.map(function (r) { return r.firstInput_latency_ms; }).filter(function (v) { return v != null; });
+    var rec = rs.map(function (r) { return r.recovery_ms; }).filter(function (v) { return v != null; });
+    var dt = rs.filter(function (r) { return r.dual; });
+    return {
+      n: rs.length,
+      reversalRate: revN ? rev / revN : NaN,
+      revN: revN,
+      latency: HW.mean(lat),
+      recovery: HW.mean(rec),
+      successRate: rs.filter(function (r) { return r.success; }).length / rs.length,
+      dualAcc: dt.length
+        ? (dt.reduce(function (a, r) { return a + (r.dualTargets ? r.dualHits / r.dualTargets : 0); }, 0) / dt.length)
+        : NaN
+    };
+  }
+
+  function finish() {
+    if (finished) return;
+    finished = true;
+    document.getElementById('stageCard').classList.add('hidden');
+    if (raf) cancelAnimationFrame(raf);
+
+    var rows = [];
+    ['A','B','C'].forEach(function (cid) {
+      var s = condStats(cid);
+      if (!s) return;
+      rows.push(['格式 ' + cid + ' · ' + COND[cid].label, '']);
+      rows.push(['　反向操纵率（主指标）', HW.fmtPct(s.reversalRate * 100) + '（' + s.revN + ' 试次有首次输入）']);
+      rows.push(['　首次输入延迟 / 恢复时长', HW.fmt1(s.latency) + ' ms / ' + HW.fmt1(s.recovery) + ' ms']);
+      rows.push(['　成功率', HW.fmtPct(s.successRate * 100)]);
+    });
+    rows.push(['— 双任务代价（核心增量预测）—', '']);
+    ['A','B','C'].forEach(function (cid) {
+      var s0 = condStats(cid, false), s1 = condStats(cid, true);
+      if (!s0 || !s1) return;
+      rows.push(['　格式 ' + cid + '：单任务 → 双任务（反向率）',
+                 HW.fmtPct(s0.reversalRate * 100) + ' → ' + HW.fmtPct(s1.reversalRate * 100)]);
+      rows.push(['　格式 ' + cid + '：单任务 → 双任务（恢复时长）',
+                 HW.fmt1(s0.recovery) + ' → ' + HW.fmt1(s1.recovery) + ' ms']);
+      rows.push(['　格式 ' + cid + '：次级任务正确率', HW.fmtPct(s1.dualAcc * 100)]);
+    });
+
+    HW.finishPage({
+      experiment: 'attitude',
+      title: '姿态仪与 Malcolm Horizon',
+      trials: records,
+      rows: rows,
+      meta: {
+        startedAt: startedAt,
+        nTrials: trials.length,
+        design: '3 格式 × 12 试次被试内随机混合；每格式 6 试次叠加 1-back 数字次级任务',
+        reversalDefinition: '首次输入使偏差进一步加大（sign(输入方向) == sign(初始偏差)）即记为反向操纵'
+      },
+      nextHref: null,
+      note: '这是你一个人的结果，只能当描述统计看。正式结论要等 10 名被试聚合后用方向性符号检验判断。'
+    });
+    if (window.Personal) window.Personal.render('attitude', records);
+  }
+
+  /* ---------- 启动 ---------- */
+  /* 一屏自适应：canvas 内部分辨率不变，显示尺寸按视口等比缩小，
+     进入实验时整块画面（含提示）一屏完整呈现，无需滚动。 */
+  function fitStage() {
+    var card = document.getElementById('stageCard');
+    if (!card || card.classList.contains('hidden')) return;
+    var scale = Math.min(1, (window.innerWidth - 56) / W, (window.innerHeight - 130) / H);
+    function apply() {
+      cv.style.width = Math.round(W * scale) + 'px';
+      cv.style.height = Math.round(H * scale) + 'px';
+      cv.style.margin = '0 auto';
+    }
+    apply();
+    var over = document.documentElement.scrollHeight - window.innerHeight;
+    if (over > 0) scale = Math.max(0.2, scale - over / H);
+    apply();
+  }
+  window.addEventListener('resize', fitStage);
+
+  document.getElementById('btnStart').addEventListener('click', function () {
+    document.getElementById('intro').classList.add('hidden');
+    var h1 = document.querySelector('h1');
+    var sub = document.querySelector('.sub');
+    if (h1) h1.classList.add('hidden');
+    if (sub) sub.classList.add('hidden');
+    document.body.classList.add('task-running');
+    document.getElementById('stageCard').classList.remove('hidden');
+    fitStage();
+    startedAt = HW.iso();
+    startTrial(queue[0]);
+  });
+})();
+</script>
+</body>
+</html>

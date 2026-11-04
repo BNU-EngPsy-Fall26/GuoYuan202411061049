@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-page-node-id="vO3dW6z6xf6YfDf78zeGzO">
+<head data-page-node-id="WoQaLcyA6zgMAZDmZY9gU6">
+<meta charset="utf-8" data-page-node-id="EpM4ZDhQaC8xBKqEGaM7Dt">
+<meta name="viewport" content="width=device-width,initial-scale=1" data-page-node-id="CGRHBnX7socF5jmIWu0E72">
+<title>实验一 · SEEV 驾驶仪表采样</title>
+<link rel="stylesheet" href="css/style.css" data-page-node-id="tQjhdsQwtnF8r1AUpDKJTc">
+<link rel="icon" href="data:,">
+</head>
+<body data-page-node-id="zP7GWJhddgaO7L2RnUIZnE">
+<div class="wrap" data-page-node-id="Ne2LJhFjlHLEKR7V0KHfkj">
+
+  <h1 data-page-node-id="jGsIkJQbOyce6hAxDSyfoK">实验一 · SEEV 驾驶仪表采样</h1>
+  <div class="sub" data-page-node-id="796gWnf47k3lh2jWRFrKcd">一边把车保持在路上，一边盯着三个仪表。本实验关心的是：注意会按什么规则分配到不同仪表上。全程约 8–10 分钟。</div>
+
+  <div class="card" id="intro" data-page-node-id="he9iPvNdHgmOHAuCI9JhrF">
+    <h2 style="margin-top:0" data-page-node-id="bJ6FWzAitZC9kpVvSDE1bJ">你要做的事</h2>
+    <ul data-page-node-id="EzDABnrXsnJPIx4AV2GDXZ">
+      <li data-page-node-id="rs6D4PIPwCjSpB7og9WIjD"><b data-page-node-id="QIugnbkyc6A640HAIvyX1X">主任务</b>：用 <kbd data-page-node-id="3UGJ0j35sH5Gm9VyTLFsTq">←</kbd> <kbd data-page-node-id="5tdSAxuawRfCWEDT8wdlkB">→</kbd> 把车保持在车道中间。路会自己缓慢漂移。</li>
+      <li data-page-node-id="M8lcv2wWJnpzV8utQpDgPi"><b data-page-node-id="51AhSz4cSXrr3aEAOqAiAE">仪表任务</b>：上方三个仪表（速度 / 水温 / 油量）的指针会缓慢摆动。<b data-page-node-id="jBBtj3cJ1nQFEOYurOfMxN">指针一旦越过红色警戒线</b>，就尽快按对应数字键：<kbd data-page-node-id="eD6UefGHBTVclasta2VQAl">1</kbd> 速度、<kbd data-page-node-id="wiMWfTak0yeweEkECyynjB">2</kbd> 水温、<kbd data-page-node-id="aXAVeAHi1EVuNuC6tOp3Kh">3</kbd> 油量。</li>
+      <li data-page-node-id="du2Os70mrEeVDDRRUkRq9E"><b data-page-node-id="10kNKc7JS97b3qT1sFITmN">关键设定</b>：仪表<b data-page-node-id="bAvuhnGNCbDUuY1zb6k3EZ">只有在你"看"它的时候才看得清</b>（没看的仪表会被雾化）。所以你必须来回扫视才能发现越线事件。</li>
+      <li data-page-node-id="it7MOdZ2hBs2zaT3tBoH0x">一共 2 大段，每段 10 小段 × 20 秒。中间会显示得分。</li>
+    </ul>
+
+    <h3 data-page-node-id="uDRavgDiv8BEXGPWBz1C1I">注视方式选择</h3>
+    <p class="note" data-page-node-id="4y8O3iMr8slQf08Nc9BZLj">
+      本实验可以用你的摄像头做网页端眼动估计（画面只在本地浏览器处理，<b data-page-node-id="gvUXpEJHGRn1bSNjr33c0H">不录制、不上传</b>），
+      也可以用鼠标代替。<b>两种方式严格互斥</b>：选用摄像头并完成<b>全屏 9 点校准</b>后，仪表<b>只跟随你的目光</b>，
+      鼠标移动不再影响画面；选用鼠标时，鼠标移到哪个仪表，哪个仪表才清晰。两种都能完成实验。
+    </p>
+    <div class="actions" data-page-node-id="BvANKJrzd2LdtwuDprej7t">
+      <button id="btnCam" data-page-node-id="ALaMI2DSyyiSlBsa9dXnEU">用摄像头眼动（需校准，约 +1.5 分钟）</button>
+      <button id="btnMouse" class="sec" data-page-node-id="pTrABBrEXVceuKzvYQ2Zxh">跳过，用鼠标方式</button>
+    </div>
+    <p class="note" id="camNote" data-page-node-id="gZjzfEON59cGbrSNpcI0BB"></p>
+  </div>
+
+  <div class="card hidden" id="stageCard" data-page-node-id="EhN2ekvHmE7wt6CDPbIXIY">
+    <div class="hud" data-page-node-id="fHwQd9mYEoGAPQFBqd464D">
+      <span data-page-node-id="1CSLunawyFNNbowSHqwuQU">阶段 <b id="hCond" data-page-node-id="MvfNmpmQ6Grkx7u6OkCrQL">—</b></span>
+      <span data-page-node-id="eLfzw0CP9f0N1A7Z4joemM">小段 <b id="hSeg" data-page-node-id="VqnIKRdsQ2FygisKDJ4eMb">—</b></span>
+      <span data-page-node-id="450vboQF2rdIQZhEtXluw2">得分 <b id="hScore" data-page-node-id="AalRf8Sy9Q48M4sPBVCsLa">0</b></span>
+      <span data-page-node-id="YyhE6NOesAij7AUigUO5Oi">漏报 <b id="hMiss" data-page-node-id="GLvZbFveI0Gs7ugMlp6Ho3">0</b></span>
+      <span data-page-node-id="CzkoC5ly1OvupsumMzQ6wf">注视来源 <b id="hGaze" data-page-node-id="OwVCDyaTYDEqCGhb3kcK3V">—</b> <span id="hGazeState" class="hint"></span></span>
+    </div>
+    <div class="stage" data-page-node-id="VPMYiaKo7XvPg1QHewje9y">
+      <canvas id="cv" width="980" height="620" data-page-node-id="EKZ1PGQSVNpXjfxAzTvGy8"></canvas>
+    </div>
+    <p class="hint center" data-page-node-id="JQOgLzCQkEfDejMG5sHAAH">
+      <kbd data-page-node-id="bCWoE28NTe0AEbUAvFH1sK">←</kbd><kbd data-page-node-id="y3UTQEserbDq18Bt7kjWWQ">→</kbd> 转向　｜　<kbd data-page-node-id="lltTbtDSLpuX83isIJ1WvJ">1</kbd> 速度表 <kbd data-page-node-id="wkXVPHSjqHxJPtAGILRn9A">2</kbd> 水温表 <kbd data-page-node-id="DqrP4DSOdqqxQss6qwF1SL">3</kbd> 油量表
+      <span id="penaltyHint" data-page-node-id="C5r1NOtGLGw3zXxH0cko66"></span>
+    </p>
+  </div>
+
+  <div class="card hidden" id="interCard" data-page-node-id="1mvJR0aXrSuFulpuFhDb4K">
+    <h2 style="margin-top:0" id="interTitle" data-page-node-id="JF5cftVBDDCUBD0DX4fA7x">休息</h2>
+    <p id="interBody" data-page-node-id="OiPBHH1UIixcBywuPHM8Eb"></p>
+    <div class="actions" data-page-node-id="cJJoG9k2dVQRStw3SjMSMa"><button id="btnNext" data-page-node-id="drmut91ZIuJtuwn7AzFGrK">继续</button></div>
+  </div>
+
+  <div class="card" id="result" data-page-node-id="qCL99WacvaNnYC1PHLkiUl"></div>
+
+</div>
+
+<script src="js/common.js"></script>
+<script src="js/analysis.js"></script>
+<script src="js/personal.js"></script>
+<script src="js/gaze.js"></script>
+<script>
+(function () {
+  'use strict';
+  var HW = window.HW;
+  var sess = HW.requireSession();
+  if (!sess) return;
+
+  var cv = document.getElementById('cv');
+  var ctx = cv.getContext('2d');
+  var W = cv.width, H = cv.height;
+
+  /* =========================================================
+     仪表定义（带宽按 Senders 1964 的量级）
+     ========================================================= */
+  var GAUGES = [
+    { id:'speed', name:'速度表', key:'1', bw:0.40, x:14,  y:16, w:300, h:176, penalty:10 },
+    { id:'temp',  name:'水温表', key:'2', bw:0.20, x:340, y:16, w:300, h:176, penalty:10 },
+    { id:'fuel',  name:'油量表', key:'3', bw:0.05, x:666, y:16, w:300, h:176, penalty:10 }
+  ];
+  /* 眼动识别范围（AOI）在仪表面板矩形之外向外扩展一圈：
+     向下扩展最多，专门覆盖「被试盯着仪表下半部、或刚落在仪表下方的马路边缘」却仍被识别为在看这个表；
+     左右只小量扩展（仪表间距仅 26px，避免相邻 AOI 重叠）。 */
+  var AOI_PAD = { x: 10, top: 8, bot: 60 };
+  /* 凝视保持：WebGazer 单帧预测偶尔会飘到 AOI 外/相邻 AOI，
+     只有偏离持续超过这个时长才真正切换归属，避免仪表随噪声反复变糊（"不稳定"）。
+     注意：从"没看任何表"→"看某表"是即时响应的，保证你想看某表时立刻清晰。 */
+  var AOI_GRACE = 280;
+  var THRESH = 0.82;      /* 越线阈值 */
+  var HOLD = 400;         /* 越过阈值需持续 400 ms 才算事件 */
+  var WINDOW = 3500;      /* 事件响应窗口 */
+  var REFRACT = 4000;     /* 同一仪表的事件间隔 */
+
+  var CONDITIONS = [
+    { id:'baseline', label:'基线（三仪表等权）', valueMul:{speed:1, temp:1, fuel:1} },
+    { id:'value',    label:'价值操控（油量越线罚 50）', valueMul:{speed:1, temp:1, fuel:5} }
+  ];
+
+  var seed = HW.seedFrom(sess.id, 'seev');
+  var rng = HW.makeRng(seed);
+  /* 条件顺序在被试间平衡（每条件只有一整个 block，故用被试间平衡代替 ABBA） */
+  var condOrder = (seed % 2 === 0) ? [0, 1] : [1, 0];
+
+  var SEG_MS = 20000;
+  var N_SEG = 10;
+  var PRACTICE_MS = 15000;
+
+  /* 信号：三个正弦叠加，最高频率 = 带宽 */
+  var sigPhase = GAUGES.map(function () {
+    return [rng.range(0, 6.28), rng.range(0, 6.28), rng.range(0, 6.28)];
+  });
+  function signal(i, tSec) {
+    var p = sigPhase[i], b = GAUGES[i].bw, a = [1, 0.7, 0.5], f = [0.31 * b, 0.63 * b, b];
+    var s = 0, n = 0;
+    for (var k = 0; k < 3; k++) { s += a[k] * Math.sin(2 * Math.PI * f[k] * tSec + p[k]); n += a[k]; }
+    return s / n;
+  }
+
+  /* 道路漂移 */
+  var roadPhase = [rng.range(0, 6.28), rng.range(0, 6.28)];
+  function driftAt(tSec) {
+    return 150 * (0.6 * Math.sin(2 * Math.PI * 0.15 * tSec + roadPhase[0]) +
+                  0.4 * Math.sin(2 * Math.PI * 0.07 * tSec + roadPhase[1]));
+  }
+
+  /* =========================================================
+     状态
+     ========================================================= */
+  var st = null;
+  var raf = null;
+  var startedAt = null;
+  var records = [];
+  var allEvents = [];
+  var gazeMode = 'mouse';
+  var precisionPx = null;
+  var gazeErr = null;
+  var finished = false;
+
+  function newGaugeState() {
+    return GAUGES.map(function () {
+      return { above:0, alarm:false, alarmAt:0, lastEnd:-99999, id:null };
+    });
+  }
+
+  function newSegment(condIdx, segIdx, duration, isPractice) {
+    return {
+      condIdx: condIdx,
+      cond: CONDITIONS[condIdx].id,
+      condLabel: CONDITIONS[condIdx].label,
+      segIdx: segIdx,
+      practice: !!isPractice,
+      duration: duration,
+      t0: 0, t0Sec: 0,
+      gs: newGaugeState(),
+      dwell: [0, 0, 0],          /* 各 AOI 累计注视时长（ms） */
+      curAOI: -1,
+      curAOISince: 0,
+      lastAOISwitchAt: 0,      /* 凝视保持：最近一次"真实切换归属"的时间戳 */
+      fixations: [0, 0, 0],
+      events: [0, 0, 0],
+      misses: [0, 0, 0],
+      hits: [0, 0, 0],
+      rts: [[], [], []],
+      falseAlarms: 0,
+      laneSq: 0, laneN: 0,
+      offroadMs: 0,
+      score: 0,
+      totalMs: 0
+    };
+  }
+
+  /* ---------- 绘制 ---------- */
+  function drawGauge(g, i, v, fixated, s) {
+    var cx = g.x + g.w / 2, cy = g.y + 96;
+    ctx.save();
+    /* 面板 */
+    roundRect(g.x, g.y, g.w, g.h, 12);
+    ctx.fillStyle = '#151a21'; ctx.fill();
+    ctx.lineWidth = 3;
+    ctx.strokeStyle = (s.alarm && fixated) ? '#ff3b30' : '#39424f';
+    ctx.stroke();
+
+    /* 标题 */
+    ctx.fillStyle = '#c8d0da';
+    ctx.font = '600 15px -apple-system,"Microsoft YaHei",sans-serif';
+    ctx.textAlign = 'left';
+    ctx.fillText(g.name + '　带宽 ' + g.bw.toFixed(2) + ' Hz', g.x + 14, g.y + 24);
+    ctx.fillStyle = '#7d8798';
+    ctx.font = '13px -apple-system,"Microsoft YaHei",sans-serif';
+    ctx.fillText('按 ' + g.key + ' 报告越线', g.x + g.w - 96, g.y + 24);
+
+    /* 表盘 */
+    ctx.translate(cx, cy);
+    ctx.beginPath(); ctx.arc(0, 0, 60, 0, Math.PI * 2);
+    ctx.fillStyle = '#0e1218'; ctx.fill();
+    ctx.strokeStyle = '#4a5568'; ctx.lineWidth = 2; ctx.stroke();
+
+    /* 刻度 */
+    for (var k = -10; k <= 10; k++) {
+      var a = (-90 + k * 13.5) * Math.PI / 180;
+      var r1 = (k % 5 === 0) ? 46 : 51;
+      ctx.beginPath();
+      ctx.moveTo(r1 * Math.cos(a), r1 * Math.sin(a));
+      ctx.lineTo(56 * Math.cos(a), 56 * Math.sin(a));
+      ctx.strokeStyle = (k % 5 === 0) ? '#8b95a5' : '#4a5568';
+      ctx.lineWidth = (k % 5 === 0) ? 2 : 1;
+      ctx.stroke();
+    }
+    /* 警戒区（阈值之外标红） */
+    var at = THRESH * 135 - 90;
+    [-1, 1].forEach(function (sgn) {
+      var a0 = (-90 + sgn * 135) * Math.PI / 180, a1 = (sgn * THRESH * 135 - 90) * Math.PI / 180;
+      ctx.beginPath();
+      ctx.arc(0, 0, 56, Math.min(a0, a1), Math.max(a0, a1));
+      ctx.strokeStyle = 'rgba(255,59,48,.75)'; ctx.lineWidth = 4; ctx.stroke();
+    });
+
+    if (fixated) {
+      /* 指针 */
+      var av = (-90 + v * 135) * Math.PI / 180;
+      ctx.beginPath();
+      ctx.moveTo(-8 * Math.cos(av + Math.PI / 2), -8 * Math.sin(av + Math.PI / 2));
+      ctx.lineTo(52 * Math.cos(av), 52 * Math.sin(av));
+      ctx.lineTo(8 * Math.cos(av + Math.PI / 2), 8 * Math.sin(av + Math.PI / 2));
+      ctx.closePath();
+      ctx.fillStyle = s.alarm ? '#ff3b30' : '#ffd54a';
+      ctx.fill();
+      ctx.beginPath(); ctx.arc(0, 0, 5, 0, Math.PI * 2);
+      ctx.fillStyle = '#ffd54a'; ctx.fill();
+      /* 数值 */
+      ctx.fillStyle = s.alarm ? '#ff6b60' : '#e6ebf2';
+      ctx.font = '600 18px ui-monospace,Consolas,monospace';
+      ctx.textAlign = 'center';
+      ctx.fillText((v >= 0 ? '+' : '') + v.toFixed(2), 0, 88);
+      if (s.alarm) {
+        ctx.fillStyle = '#ff3b30';
+        ctx.font = '700 16px -apple-system,"Microsoft YaHei",sans-serif';
+        ctx.fillText('越线！按 ' + g.key, 0, -76);
+      }
+    } else {
+      /* 雾化（gaze-contingent window） */
+      ctx.restore();
+      ctx.save();
+      ctx.fillStyle = 'rgba(13,16,21,.90)';
+      roundRect(g.x + 6, g.y + 34, g.w - 12, g.h - 40, 8); ctx.fill();
+      ctx.fillStyle = '#58616f';
+      ctx.font = '14px -apple-system,"Microsoft YaHei",sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText('未注视 · 看不清', g.x + g.w / 2, g.y + g.h / 2 + 10);
+    }
+    ctx.restore();
+  }
+
+  function roundRect(x, y, w, h, r) {
+    ctx.beginPath();
+    ctx.moveTo(x + r, y);
+    ctx.lineTo(x + w - r, y); ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+    ctx.lineTo(x + w, y + h - r); ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+    ctx.lineTo(x + r, y + h); ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+    ctx.lineTo(x, y + r); ctx.quadraticCurveTo(x, y, x + r, y);
+    ctx.closePath();
+  }
+
+  function drawRoad(carX, tSec) {
+    var yTop = 220, yBot = H;
+    /* 背景 */
+    var g = ctx.createLinearGradient(0, 0, 0, yTop);
+    g.addColorStop(0, '#7ea7d0'); g.addColorStop(1, '#c7d7e4');
+    ctx.fillStyle = g; ctx.fillRect(0, 0, W, yTop);
+    ctx.fillStyle = '#3f6b3a'; ctx.fillRect(0, yTop, W, H - yTop);
+
+    var drift = driftAt(tSec);
+    function centerAt(y) {
+      var p = (y - yTop) / (yBot - yTop);
+      return W / 2 + drift * p;
+    }
+    function halfAt(y) {
+      var p = (y - yTop) / (yBot - yTop);
+      return 45 + 130 * p;
+    }
+
+    /* 路面 */
+    ctx.beginPath();
+    for (var y = yTop; y <= yBot; y += 8) { ctx.lineTo(centerAt(y) - halfAt(y), y); }
+    for (var y2 = yBot; y2 >= yTop; y2 -= 8) { ctx.lineTo(centerAt(y2) + halfAt(y2), y2); }
+    ctx.closePath();
+    ctx.fillStyle = '#4a4a52'; ctx.fill();
+
+    /* 边线 */
+    [ -1, 1 ].forEach(function (sgn) {
+      ctx.beginPath();
+      for (var y = yTop; y <= yBot; y += 8) { ctx.lineTo(centerAt(y) + sgn * halfAt(y), y); }
+      ctx.strokeStyle = '#f2f2f2'; ctx.lineWidth = 3; ctx.stroke();
+    });
+
+    /* 中心虚线 */
+    ctx.strokeStyle = '#ffe08a'; ctx.lineWidth = 4;
+    ctx.setLineDash([26, 26]);
+    ctx.lineDashOffset = -(tSec * 300) % 52;
+    ctx.beginPath();
+    for (var y3 = yTop; y3 <= yBot; y3 += 8) { ctx.lineTo(centerAt(y3), y3); }
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    /* 车 */
+    var carY = H - 78;
+    var cx = W / 2 + carX;
+    ctx.fillStyle = '#e8e8ec';
+    roundRect(cx - 26, carY - 18, 52, 46, 8); ctx.fill();
+    ctx.fillStyle = '#2b2f36';
+    roundRect(cx - 20, carY - 12, 40, 26, 5); ctx.fill();
+    ctx.fillStyle = '#111';
+    roundRect(cx - 30, carY - 4, 10, 22, 3); ctx.fill();
+    roundRect(cx + 20, carY - 4, 10, 22, 3); ctx.fill();
+  }
+
+  /* ---------- AOI 判定（含扩展识别范围） ---------- */
+  function aoiAt(p) {
+    if (!p) return -1;
+    for (var i = 0; i < GAUGES.length; i++) {
+      var g = GAUGES[i];
+      if (p.x >= g.x - AOI_PAD.x && p.x <= g.x + g.w + AOI_PAD.x &&
+          p.y >= g.y - AOI_PAD.top && p.y <= g.y + g.h + AOI_PAD.bot) return i;
+    }
+    return -1;
+  }
+
+  /* =========================================================
+     段循环
+     ========================================================= */
+  var plan = [];      /* {condIdx, segIdx, practice} */
+  var pi = 0;
+
+  function buildPlan() {
+    plan.push({ condIdx: 0, segIdx: 0, practice: true, duration: PRACTICE_MS });
+    condOrder.forEach(function (ci) {
+      for (var s = 0; s < N_SEG; s++) plan.push({ condIdx: ci, segIdx: s, practice: false, duration: SEG_MS });
+    });
+  }
+  buildPlan();
+
+  /* ---------- 一屏自适应 ----------
+     canvas 内部分辨率固定 980×620（画布坐标系不变），
+     显示尺寸按视口高度等比缩小，保证 HUD + 三个仪表 + 马路 + 底部提示
+     在进入实验时全部完整呈现，不需要滚动。
+     安全性：注视点映射 Gaze.canvasXY 用 getBoundingClientRect 换算，
+     缩放后依然正确；校准/精度自测的红点相对整个窗口定位，不受影响。 */
+  function fitStage() {
+    var card = document.getElementById('stageCard');
+    if (!card || card.classList.contains('hidden')) return;
+    var hint = card.querySelector('p.hint');
+    var availW = Math.min(window.innerWidth - 56, W);
+    var scale = Math.min(1, availW / W, (window.innerHeight - 130) / H);
+    function apply() {
+      cv.style.width = Math.round(W * scale) + 'px';
+      cv.style.height = Math.round(H * scale) + 'px';
+      cv.style.margin = '0 auto';
+    }
+    apply();
+    /* 二次校准：布局对 canvas 显示高度是线性的，直接用页面真实 scrollHeight
+       与视口的差值把 canvas 缩回同样多的显示像素 —— 提示文字、卡片内外边距、
+       body 底部留白一次性全部修准。 */
+    var over = document.documentElement.scrollHeight - window.innerHeight;
+    if (over > 0) scale = Math.max(0.2, scale - over / H);
+    apply();
+  }
+  window.addEventListener('resize', fitStage);
+
+  function runSegment(p) {
+    st = newSegment(p.condIdx, p.segIdx, p.duration, p.practice);
+    st.carX = 0;
+    st.keys = {};
+    st.t0 = HW.now();
+    st.t0Sec = (startedAtSec + (st.t0 - startPerf) / 1000);
+    document.getElementById('hCond').textContent =
+      p.practice ? '练习' : (CONDITIONS[p.condIdx].label + '（' + (condOrder.indexOf(p.condIdx) + 1) + '/2）');
+    document.getElementById('hSeg').textContent = p.practice ? '—' : ((p.segIdx + 1) + ' / ' + N_SEG);
+    document.getElementById('penaltyHint').textContent =
+      p.practice ? '' : ('　【本段扣分：速度 -' + (10 * CONDITIONS[p.condIdx].valueMul.speed) +
+                         '　水温 -' + (10 * CONDITIONS[p.condIdx].valueMul.temp) +
+                         '　油量 -' + (10 * CONDITIONS[p.condIdx].valueMul.fuel) + '】');
+    document.getElementById('stageCard').classList.remove('hidden');
+    document.getElementById('interCard').classList.add('hidden');
+    fitStage();
+    if (raf) cancelAnimationFrame(raf);
+    raf = requestAnimationFrame(tick);
+  }
+
+  var startedAtSec = 0, startPerf = 0;
+
+  function tick() {
+    if (!st) return;
+    var now = HW.now();
+    var el = now - st.t0;
+    var lastFrame = st.lastFrame || now;
+    var dt = Math.min(100, now - lastFrame);
+    st.lastFrame = now;
+    st.totalMs += dt;
+
+    var tSec = st.t0Sec + el / 1000;
+
+    /* 转向 */
+    var dv = 0;
+    if (st.keys.ArrowLeft) dv -= 1;
+    if (st.keys.ArrowRight) dv += 1;
+    st.carX = HW.clamp(st.carX + dv * 260 * dt / 1000, -240, 240);
+
+    /* 车道误差 */
+    var drift = driftAt(tSec);
+    var err = st.carX - drift;
+    st.laneSq += err * err; st.laneN++;
+    if (Math.abs(err) > 130) st.offroadMs += dt;
+
+    /* 注视归属（含凝视保持：单帧预测飘移不立即切换，避免仪表随噪声反复变糊） */
+    var a = aoiAt(window.Gaze.point);
+    if (a !== st.curAOI) {
+      var commit = false;
+      if (st.curAOI < 0) commit = true;                       /* 从"没看表"→"看某表"：即时响应 */
+      else if (now - st.lastAOISwitchAt >= AOI_GRACE) commit = true; /* 偏离持续够久才真正切换 */
+      if (commit) {
+        if (st.curAOI >= 0 && (now - st.curAOISince) >= 100) st.fixations[st.curAOI]++;
+        st.curAOI = a; st.curAOISince = now; st.lastAOISwitchAt = now;
+      }
+      /* 否则保持上一帧的归属（curAOI 不变），直到偏离超过 AOI_GRACE */
+    } else {
+      st.lastAOISwitchAt = now;   /* 持续盯在同一 AOI 内，重置保持计时 */
+    }
+    if (a >= 0) st.dwell[a] += dt;
+
+    /* 仪表事件 */
+    for (var i = 0; i < GAUGES.length; i++) {
+      var v = signal(i, tSec), g = GAUGES[i], s = st.gs[i];
+      if (!s.alarm) {
+        if (Math.abs(v) > THRESH) {
+          if (!s.above) s.above = now;
+          else if (now - s.above >= HOLD && now - s.lastEnd >= REFRACT && (el + WINDOW) <= st.duration) {
+            /* 最后一条：段末若留不出完整响应窗口就不触发新事件，
+               否则这些事件既不算命中也不算漏报，会从账上凭空消失 */
+            s.alarm = true; s.alarmAt = now; s.value = v;
+            st.events[i]++;
+            allEvents.push({ cond: st.cond, seg: st.segIdx, gauge: g.id, onset_ms: Math.round(el), practice: st.practice });
+          }
+        } else s.above = 0;
+      } else {
+        if (now - s.alarmAt > WINDOW) {
+          s.alarm = false; s.lastEnd = now;
+          st.misses[i]++;
+          st.score -= 10 * CONDITIONS[st.condIdx].valueMul[g.id];
+        }
+      }
+      s.v = v;
+    }
+
+    /* 绘制 */
+    ctx.fillStyle = '#0d0f12'; ctx.fillRect(0, 0, W, H);
+    drawRoad(st.carX, tSec);
+    for (var j = 0; j < GAUGES.length; j++) {
+      drawGauge(GAUGES[j], j, st.gs[j].v || 0, (st.curAOI === j), st.gs[j]);
+    }
+
+    /* 注视来源实时反馈。摄像头模式由 Gaze.lastGazeAt 判断跟踪是否还活着；
+       练习段额外画一个淡注视点，让被试直观确认画面确实跟着眼睛走。
+       正式段不画注视点——给被试看自己的注视点会形成反馈、改变扫视策略。 */
+    var gz = window.Gaze;
+    var gsEl = document.getElementById('hGazeState');
+    if (gazeMode === 'webgazer') {
+      var idle = HW.now() - gz.lastGazeAt;
+      var live = idle < 1500;
+      gsEl.textContent = live ? '· 眼动跟踪正常（白圈=当前注视点，应跟着眼睛走）' : '· ⚠ 未检测到注视，请正对摄像头';
+      if (live && gz.point) {
+        ctx.save();
+        ctx.beginPath();
+        ctx.arc(gz.point.x, gz.point.y, 9, 0, Math.PI * 2);
+        ctx.strokeStyle = 'rgba(255,255,255,.8)'; ctx.lineWidth = 2; ctx.stroke();
+        ctx.beginPath();
+        ctx.arc(gz.point.x, gz.point.y, 2.5, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(255,255,255,.9)'; ctx.fill();
+        ctx.restore();
+      }
+    } else {
+      gsEl.textContent = '· 移动鼠标到仪表上';
+    }
+
+    /* HUD */
+    ctx.fillStyle = 'rgba(255,255,255,.85)';
+    ctx.font = '600 14px -apple-system,"Microsoft YaHei",sans-serif';
+    ctx.textAlign = 'left';
+    ctx.fillText(Math.max(0, Math.ceil((st.duration - el) / 1000)) + ' s', 16, 214);
+
+    document.getElementById('hScore').textContent = st.score;
+    document.getElementById('hMiss').textContent = st.misses[0] + st.misses[1] + st.misses[2];
+
+    if (el >= st.duration) { endSegment(); return; }
+    raf = requestAnimationFrame(tick);
+  }
+
+  function endSegment() {
+    if (raf) cancelAnimationFrame(raf);
+    if (st.curAOI >= 0 && (HW.now() - st.curAOISince) >= 100) st.fixations[st.curAOI]++;
+
+    var p = plan[pi];
+    if (!p.practice) {
+      var total = st.totalMs || 1;
+      var allRts = st.rts[0].concat(st.rts[1], st.rts[2]);
+      records.push({
+        cond: st.cond,                     /* 接口标准键 */
+        rt: allRts.length ? Math.round(HW.mean(allRts)) : null,   /* 接口标准键：事件响应 RT 均值 */
+        correct: null,                     /* 段级记录无二值正确性，命中率见 hits/misses 字段 */
+        condition: st.cond,
+        conditionLabel: st.condLabel,
+        conditionOrderPos: condOrder.indexOf(st.condIdx) + 1,
+        segment: st.segIdx + 1,
+        duration_ms: Math.round(st.duration),
+        gaze_source: gazeMode,
+        pdt_speed: st.dwell[0] / total,
+        pdt_temp: st.dwell[1] / total,
+        pdt_fuel: st.dwell[2] / total,
+        fixations_speed: st.fixations[0],
+        fixations_temp: st.fixations[1],
+        fixations_fuel: st.fixations[2],
+        events_speed: st.events[0], events_temp: st.events[1], events_fuel: st.events[2],
+        misses_speed: st.misses[0], misses_temp: st.misses[1], misses_fuel: st.misses[2],
+        hits_speed: st.hits[0], hits_temp: st.hits[1], hits_fuel: st.hits[2],
+        rt_speed: HW.mean(st.rts[0]), rt_temp: HW.mean(st.rts[1]), rt_fuel: HW.mean(st.rts[2]),
+        falseAlarms: st.falseAlarms,
+        lane_rms: Math.sqrt(st.laneSq / Math.max(1, st.laneN)),
+        offroad_ms: Math.round(st.offroadMs),
+        score: st.score
+      });
+    }
+
+    pi++;
+    if (pi >= plan.length) { finish(); return; }
+
+    var next = plan[pi];
+    var newCond = (next.condIdx !== p.condIdx) || (p.practice);
+    document.getElementById('stageCard').classList.add('hidden');
+    document.getElementById('interCard').classList.remove('hidden');
+    if (newCond) {
+      document.getElementById('interTitle').textContent =
+        next.practice ? '练习结束' : ('下一段：' + CONDITIONS[next.condIdx].label);
+      document.getElementById('interBody').innerHTML = next.practice
+        ? '练习完成。下面进入正式实验，共 <b>2 段 × 10 小段 × 20 秒</b>。<br>记住：仪表只有被你看的时候才看得清。'
+        : ('本段共 <b>10 小段 × 20 秒</b>。<br>扣分规则：' +
+           '速度 -' + (10 * CONDITIONS[next.condIdx].valueMul.speed) + '　' +
+           '水温 -' + (10 * CONDITIONS[next.condIdx].valueMul.temp) + '　' +
+           '油量 -' + (10 * CONDITIONS[next.condIdx].valueMul.fuel) +
+           '<br>准备好了就点“继续”。');
+    } else {
+      document.getElementById('interTitle').textContent = '第 ' + (p.segIdx + 1) + ' 小段结束';
+      document.getElementById('interBody').innerHTML =
+        '本小段：漏报 ' + (st.misses[0] + st.misses[1] + st.misses[2]) +
+        '　当前得分 ' + st.score + '<br>休息一下，准备好就继续。';
+    }
+    document.getElementById('btnNext').onclick = function () { runSegment(next); };
+  }
+
+  /* ---------- 按键 ---------- */
+  document.addEventListener('keydown', function (e) {
+    if (['ArrowLeft','ArrowRight','1','2','3'].indexOf(e.key) >= 0) e.preventDefault();
+    if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') { if (st) st.keys[e.key] = true; return; }
+    if (!st || st.practice === undefined) return;
+    var gi = ['1','2','3'].indexOf(e.key);
+    if (gi >= 0) {
+      var s = st.gs[gi];
+      if (s.alarm) {
+        s.alarm = false; s.lastEnd = HW.now();
+        st.hits[gi]++;
+        st.rts[gi].push(HW.now() - s.alarmAt);
+      } else st.falseAlarms++;
+    }
+  });
+  document.addEventListener('keyup', function (e) { if (st) st.keys[e.key] = false; });
+
+  /* =========================================================
+     SEEV 预测 vs 实测（模型可视化）
+      Horrey, Wickens & Consalus (2006): P(A) = Σ [B × R × P] − Ef
+      这里的操作化：R = 1（三个仪表都是当前任务相关），
+                    P = 扣分权重（基线全 1；价值条件油量 5），
+                    Ef 假定三者相同 → 归一化时抵消。
+     ========================================================= */
+  function predictedPDT(condIdx) {
+    var mul = CONDITIONS[condIdx].valueMul;
+    var w = GAUGES.map(function (g) { return g.bw * mul[g.id]; });
+    var s = w[0] + w[1] + w[2];
+    return w.map(function (v) { return v / s; });
+  }
+
+  function condAgg(condId) {
+    var rs = records.filter(function (r) { return r.condition === condId; });
+    if (!rs.length) return null;
+    var tot = { speed:0, temp:0, fuel:0 };
+    rs.forEach(function (r) { tot.speed += r.pdt_speed; tot.temp += r.pdt_temp; tot.fuel += r.pdt_fuel; });
+    var n = rs.length;
+    return {
+      n: n,
+      pdt: [tot.speed / n, tot.temp / n, tot.fuel / n],
+      missRate: [
+        rs.reduce(function (a, r) { return a + (r.events_speed ? r.misses_speed / r.events_speed : 0); }, 0) / n,
+        rs.reduce(function (a, r) { return a + (r.events_temp ? r.misses_temp / r.events_temp : 0); }, 0) / n,
+        rs.reduce(function (a, r) { return a + (r.events_fuel ? r.misses_fuel / r.events_fuel : 0); }, 0) / n
+      ],
+      lane: HW.mean(rs.map(function (r) { return r.lane_rms; })),
+      score: HW.mean(rs.map(function (r) { return r.score; }))
+    };
+  }
+
+  function drawChart(canvasId) {
+    var cc = document.getElementById(canvasId);
+    if (!cc) return;
+    var c = cc.getContext('2d');
+    var w = cc.width, h = cc.height;
+    c.fillStyle = '#fff'; c.fillRect(0, 0, w, h);
+    var labels = ['速度 0.40Hz', '水温 0.20Hz', '油量 0.05Hz'];
+    var conds = ['baseline', 'value'];
+    var names = ['基线', '价值操控'];
+    var padL = 52, padB = 46, padT = 20;
+    var plotW = w - padL - 20, plotH = h - padB - padT;
+    var maxV = 0;
+    conds.forEach(function (cid, ci) {
+      var a = condAgg(cid);
+      if (!a) return;
+      predictedPDT(conds.indexOf(cid)).forEach(function (v) { maxV = Math.max(maxV, v); });
+      a.pdt.forEach(function (v) { maxV = Math.max(maxV, v); });
+    });
+    maxV = Math.max(0.1, Math.ceil(maxV * 10) / 10);
+
+    /* 网格 */
+    c.strokeStyle = '#e5e9ef'; c.lineWidth = 1;
+    c.fillStyle = '#667085'; c.font = '11px -apple-system,"Microsoft YaHei",sans-serif';
+    for (var g = 0; g <= 5; g++) {
+      var y = padT + plotH * (1 - g / 5);
+      c.beginPath(); c.moveTo(padL, y); c.lineTo(w - 20, y); c.stroke();
+      c.textAlign = 'right';
+      c.fillText((maxV * g / 5 * 100).toFixed(0) + '%', padL - 6, y + 4);
+    }
+
+    var groupW = plotW / 2;
+    conds.forEach(function (cid, ci) {
+      var a = condAgg(cid);
+      if (!a) return;
+      var pred = predictedPDT(ci);
+      var gx = padL + ci * groupW + 18;
+      var bw = (groupW - 40) / 6;
+      for (var i = 0; i < 3; i++) {
+        var x0 = gx + i * 2 * bw;
+        /* 预测 */
+        var hp = plotH * (pred[i] / maxV);
+        c.fillStyle = 'rgba(37,99,235,.35)';
+        c.fillRect(x0, padT + plotH - hp, bw - 3, hp);
+        /* 实测 */
+        var ho = plotH * (a.pdt[i] / maxV);
+        c.fillStyle = '#2563eb';
+        c.fillRect(x0 + bw, padT + plotH - ho, bw - 3, ho);
+        c.fillStyle = '#667085'; c.font = '10px -apple-system,"Microsoft YaHei",sans-serif';
+        c.textAlign = 'center';
+        c.fillText(labels[i].split(' ')[0], x0 + bw, h - 30);
+      }
+      c.fillStyle = '#1f2328'; c.font = '600 12px -apple-system,"Microsoft YaHei",sans-serif';
+      c.textAlign = 'center';
+      c.fillText(names[ci] + '　（浅=SEEV 预测，深=实测）', gx + 3 * bw, h - 10);
+    });
+    c.strokeStyle = '#98a2b3';
+    c.beginPath(); c.moveTo(padL, padT); c.lineTo(padL, padT + plotH); c.lineTo(w - 20, padT + plotH); c.stroke();
+  }
+
+  /* =========================================================
+     结束
+     ========================================================= */
+  function finish() {
+    if (finished) return;
+    finished = true;
+    document.getElementById('stageCard').classList.add('hidden');
+    document.getElementById('interCard').classList.add('hidden');
+    window.Gaze.stop();
+
+    var rows = [];
+    ['baseline', 'value'].forEach(function (cid) {
+      var a = condAgg(cid);
+      if (!a) return;
+      var ci = (cid === 'baseline') ? 0 : 1;
+      var pred = predictedPDT(ci);
+      rows.push([CONDITIONS[ci].label, '']);
+      ['speed', 'temp', 'fuel'].forEach(function (gid, i) {
+        rows.push(['　' + GAUGES[i].name + ' 注视时长占比（实测 / SEEV 预测）',
+                   HW.fmtPct(a.pdt[i] * 100) + ' / ' + HW.fmtPct(pred[i] * 100)]);
+        rows.push(['　' + GAUGES[i].name + ' 事件漏报率', HW.fmtPct(a.missRate[i] * 100)]);
+      });
+      rows.push(['　车道保持 RMS', HW.fmt1(a.lane) + ' px']);
+      rows.push(['　本段总得分', HW.fmt1(a.score)]);
+    });
+    rows.push(['注视来源', gazeMode === 'webgazer'
+      ? ('摄像头眼动（全屏 9 点校准 + 7 点精度自测，平均误差 ' +
+          (isFinite(precisionPx) ? HW.fmt1(precisionPx) + ' px' : '未取得') +
+          '；仪表仅由目光驱动，鼠标不参与）')
+      : ('鼠标即注视' + (gazeErr ? '（摄像头降级：' + gazeErr + '）' : ''))]);
+
+    HW.finishPage({
+      experiment: 'seev',
+      title: 'SEEV 驾驶仪表采样',
+      trials: records,
+      rows: rows,
+      meta: {
+        startedAt: startedAt,
+        gazeSource: gazeMode,
+        gazePrecisionPx: precisionPx,
+        gazeError: gazeErr,
+        conditionOrder: condOrder.map(function (i) { return CONDITIONS[i].id; }),
+        modelOperationalization: 'Horrey 版 SEEV: P(A)=Σ[B×R×P]−Ef；R=1，P=扣分权重，Ef 假定三者相同故归一化抵消',
+        gauges: GAUGES.map(function (g) { return { id: g.id, bandwidth: g.bw }; }),
+        thresholds: { THRESH: THRESH, HOLD_ms: HOLD, WINDOW_ms: WINDOW, REFRACT_ms: REFRACT },
+        events: allEvents
+      },
+      nextHref: 'exp2-prevalence.html',
+      nextLabel: '进入实验二 · 低流行率视觉搜索',
+      note: 'PDT = 注视时长占比。SEEV 预测用的是本设计的操作化（P = 扣分权重），不是 Horrey 2006 的原始数值。'
+    });
+
+    /* 模型可视化图 */
+    var host = document.getElementById('result');
+    var card = document.createElement('div');
+    card.className = 'card';
+    var h = document.createElement('h2');
+    h.style.marginTop = '0';
+    h.textContent = 'SEEV 预测 vs 实测注视占比';
+    card.appendChild(h);
+    var cc = document.createElement('canvas');
+    cc.id = 'modelChart'; cc.width = 900; cc.height = 340;
+    cc.style.width = '100%'; cc.style.height = 'auto';
+    cc.style.border = '1px solid #dde2e8'; cc.style.borderRadius = '8px';
+    card.appendChild(cc);
+    host.insertBefore(card, host.firstChild);
+    drawChart('modelChart');
+    if (window.Personal) window.Personal.render('seev', records);
+  }
+
+  /* =========================================================
+     启动（先决定注视方式）
+     ========================================================= */
+  function loadScript(src, cb) {
+    var s = document.createElement('script');
+    s.src = src;
+    s.onload = function () { cb(true); };
+    s.onerror = function () { cb(false); };
+    document.head.appendChild(s);
+  }
+
+  /* 统一的注视方式落地处理：mode 由 Gaze.init 决定，
+     摄像头成功 = 'webgazer'（纯眼动），否则 = 'mouse'（纯鼠标）。 */
+  function onGazeReady(mode, prec, err) {
+    gazeMode = mode; precisionPx = prec; gazeErr = err;
+    HW.store.set('gazeMode', mode);
+    var h = document.getElementById('hGaze');
+    var gsEl = document.getElementById('hGazeState');
+    var btnCam = document.getElementById('btnCam');
+    if (mode === 'webgazer') {
+      h.textContent = '摄像头眼动';
+      gsEl.textContent = '· 仪表仅由目光驱动，鼠标不参与';
+      startTask();
+    } else if (err) {
+      /* 摄像头启动失败：明确报错，【不】静默进入鼠标实验，把选择权交还用户 */
+      h.textContent = '鼠标（摄像头降级）';
+      gsEl.textContent = '· 摄像头未能启动：' + err;
+      var cn = document.getElementById('camNote');
+      cn.textContent = '⚠ 摄像头眼动未能启动：' + err + '。你可以点下方“用鼠标方式”继续，或检查摄像头权限 / 刷新页面后重试。';
+      cn.style.color = '#ff6b6b';
+      btnCam.disabled = false;
+      btnCam.textContent = '重试摄像头眼动';
+      /* btnMouse 仍可用，由用户主动选择 */
+    } else {
+      h.textContent = '鼠标即注视';
+      gsEl.textContent = '· 仪表由鼠标位置驱动';
+      startTask();
+    }
+  }
+
+  function beginWithCamera() {
+    document.getElementById('btnCam').disabled = true;
+    document.getElementById('camNote').textContent = '正在加载眼动库…';
+    loadScript('vendor/webgazer/webgazer.js', function (ok) {
+      if (!ok) {
+        document.getElementById('camNote').textContent = '⚠ 眼动库加载失败（脚本可能未下载完整），请刷新页面重试，或改用鼠标方式。';
+        document.getElementById('camNote').style.color = '#ff6b6b';
+        beginWithMouse('WebGazer 眼动库未能加载（脚本下载不完整或服务器异常）');
+        return;
+      }
+      document.getElementById('camNote').textContent = '眼动库已加载，请按屏幕提示完成全屏 9 点校准。';
+      window.Gaze.init(cv, true, function (msg) {
+        document.getElementById('camNote').textContent = msg;
+      }, onGazeReady);
+    });
+  }
+
+  function beginWithMouse(forcedErr) {
+    window.Gaze.init(cv, false, function () {}, function (mode, prec, err) {
+      onGazeReady(mode, prec, forcedErr || err);
+    });
+  }
+
+  function startTask() {
+    document.getElementById('intro').classList.add('hidden');
+    /* 任务进行中收起页面标题与副标题，把竖向空间全部让给实验画面 */
+    var h1 = document.querySelector('h1');
+    var sub = document.querySelector('.sub');
+    if (h1) h1.classList.add('hidden');
+    if (sub) sub.classList.add('hidden');
+    document.body.classList.add('task-running');
+    startedAt = HW.iso();
+    startPerf = HW.now();
+    startedAtSec = 0;
+    runSegment(plan[0]);
+  }
+
+  document.getElementById('btnCam').addEventListener('click', beginWithCamera);
+  /* 必须包一层：直接传 beginWithMouse 会把 MouseEvent 当成降级原因参数 */
+  document.getElementById('btnMouse').addEventListener('click', function () { beginWithMouse(); });
+
+  if (!sess.camera) {
+    document.getElementById('btnCam').disabled = true;
+    var cn0 = document.getElementById('camNote');
+    cn0.textContent = '⚠ 你在知情同意页未勾选“使用摄像头”，因此无法启用眼动。如需眼动，请返回首页重新同意（勾选摄像头选项）。或者直接点“用鼠标方式”继续。';
+    cn0.style.color = '#ff6b6b';
+  }
+
+  /* 调试/自动化校验钩子（无害）：暴露当前注视归属与 AOI 判定函数 */
+  window.__exp1 = {
+    aoiAt: aoiAt,
+    getCurAOI: function () { return st ? st.curAOI : -1; },
+    setGaze: function (p) { window.Gaze.point = p; },
+    GAUGES: GAUGES, AOI_PAD: AOI_PAD, AOI_GRACE: AOI_GRACE
+  };
+})();
+</script>
+</body>
+</html>

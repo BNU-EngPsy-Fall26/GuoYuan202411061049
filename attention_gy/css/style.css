@@ -1,0 +1,88 @@
+/* 注意力实验室 · 统一样式 */
+:root {
+  --bg:#f4f6f8; --card:#ffffff; --line:#dde2e8; --ink:#1f2328;
+  --mut:#667085; --acc:#2563eb; --acc-d:#1d4ed8; --ok:#15803d; --bad:#b91c1c;
+  --warn:#92400e; --warnbg:#fffbeb;
+}
+* { box-sizing:border-box; }
+html,body { margin:0; padding:0; }
+body {
+  background:var(--bg); color:var(--ink);
+  font:15px/1.65 -apple-system,BlinkMacSystemFont,"Segoe UI","Microsoft YaHei",sans-serif;
+  padding:22px 18px 60px;
+}
+/* 实验任务进行中：收小页面底部留白，帮助画面一屏呈现 */
+body.task-running { padding-bottom:14px; }
+.wrap { max-width:980px; margin:0 auto; }
+
+h1 { font-size:20px; margin:0 0 6px; }
+h2 { font-size:17px; margin:22px 0 8px; }
+h3 { font-size:15px; margin:16px 0 6px; }
+.sub { color:var(--mut); font-size:13px; margin-bottom:14px; }
+p { margin:8px 0; }
+ul,ol { margin:8px 0; padding-left:22px; }
+li { margin:3px 0; }
+
+.card { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:18px 20px; margin-bottom:16px; }
+.card.tight { padding:14px 16px; }
+
+label { display:block; margin:10px 0 4px; font-size:13px; color:var(--mut); }
+input[type=text], input[type=number], select {
+  padding:7px 9px; border:1px solid var(--line); border-radius:6px; font-size:14px; width:220px; max-width:100%;
+}
+input[type=checkbox] { width:16px; height:16px; vertical-align:-2px; margin-right:6px; }
+label.chk { display:block; font-size:14px; color:var(--ink); margin:9px 0; line-height:1.5; }
+
+button, .btn {
+  display:inline-block; background:var(--acc); color:#fff; border:0; border-radius:7px;
+  padding:9px 18px; font-size:14px; cursor:pointer; text-decoration:none; line-height:1.4;
+}
+button:hover, .btn:hover { background:var(--acc-d); }
+button.sec, .btn.sec { background:#eef2f7; color:var(--ink); }
+button.sec:hover, .btn.sec:hover { background:#e2e8f0; }
+button:disabled { background:#c7d0da; cursor:not-allowed; }
+.actions { margin-top:18px; display:flex; gap:10px; flex-wrap:wrap; }
+
+.note { font-size:13px; color:var(--mut); }
+.warn { background:var(--warnbg); border:1px solid #fde68a; border-radius:8px; padding:10px 14px; font-size:13px; color:var(--warn); }
+.status { font-size:13px; color:var(--mut); }
+.status.ok { color:var(--ok); }
+.status.bad { color:var(--bad); }
+
+table.kv { border-collapse:collapse; margin:10px 0; font-size:14px; }
+table.kv td { padding:5px 14px 5px 0; vertical-align:top; }
+table.kv td.k { color:var(--mut); white-space:nowrap; }
+table.kv td.v { font-weight:600; font-variant-numeric:tabular-nums; }
+
+table.grid { border-collapse:collapse; width:100%; font-size:13px; }
+table.grid th, table.grid td { border:1px solid var(--line); padding:5px 8px; text-align:right; font-variant-numeric:tabular-nums; }
+table.grid th { background:#f0f3f7; text-align:center; font-weight:600; }
+table.grid td:first-child, table.grid th:first-child { text-align:left; }
+
+/* 实验画布容器 */
+.stage { background:#0d0f12; border-radius:12px; overflow:hidden; position:relative; }
+.stage canvas { display:block; width:100%; height:auto; }
+.hud {
+  display:flex; gap:18px; flex-wrap:wrap; align-items:center;
+  font-size:13px; color:var(--mut); padding:8px 2px 0;
+}
+.hud b { color:var(--ink); font-variant-numeric:tabular-nums; }
+
+.center { text-align:center; }
+.big { font-size:22px; font-weight:600; }
+.hint { font-size:13px; color:var(--mut); }
+kbd {
+  background:#eef2f7; border:1px solid var(--line); border-bottom-width:2px;
+  border-radius:5px; padding:1px 7px; font:13px/1.6 ui-monospace,Consolas,monospace;
+}
+
+.overlay {
+  position:absolute; inset:0; display:flex; flex-direction:column;
+  align-items:center; justify-content:center; gap:14px; text-align:center;
+  background:rgba(12,15,20,.92); color:#fff; padding:24px;
+}
+.overlay h2 { color:#fff; margin:0; font-size:22px; }
+.overlay p { max-width:620px; margin:0; font-size:14px; color:#d6dbe2; }
+
+#result { display:none; }
+.hidden { display:none !important; }

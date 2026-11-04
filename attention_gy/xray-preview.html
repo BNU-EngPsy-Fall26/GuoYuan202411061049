@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-page-node-id="xAdDcCa0gyci9UkSr68CGD">
+<head data-page-node-id="LhsY6pEJF7UjOHJl5knkB1">
+<meta charset="utf-8" data-page-node-id="UCmrjL0oNYhqM0NFd3X3eK">
+<title>行李 X 光刺激 · 静态效果图预览（可调参）</title>
+<style>
+  :root { --bg:#f5f6f8; --card:#ffffff; --line:#dfe3e8; --ink:#1f2328; --mut:#6b7280; --acc:#2563eb; }
+  * { box-sizing: border-box; }
+  body { margin:0; padding:24px; background:var(--bg); color:var(--ink);
+         font:14px/1.6 -apple-system,"Segoe UI","Microsoft YaHei",sans-serif; }
+  h1 { font-size:18px; margin:0 0 4px; }
+  .sub { color:var(--mut); margin-bottom:18px; }
+  .panel { background:var(--card); border:1px solid var(--line); border-radius:10px; padding:16px; margin-bottom:18px; }
+  .controls { display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:14px 22px; }
+  .ctl label { display:block; font-size:12px; color:var(--mut); margin-bottom:4px; }
+  .ctl input[type=range] { width:100%; }
+  .ctl .val { font-variant-numeric:tabular-nums; color:var(--ink); font-weight:600; }
+  .row { display:flex; gap:18px; align-items:center; flex-wrap:wrap; margin-top:14px; padding-top:14px; border-top:1px solid var(--line); }
+  button { background:var(--acc); color:#fff; border:0; border-radius:6px; padding:8px 16px; font-size:14px; cursor:pointer; }
+  button.sec { background:#eef2f7; color:var(--ink); }
+  label.chk { display:flex; align-items:center; gap:6px; cursor:pointer; }
+  input[type=number] { width:90px; padding:4px 6px; border:1px solid var(--line); border-radius:5px; }
+  .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(330px,1fr)); gap:14px; }
+  figure { margin:0; background:var(--card); border:1px solid var(--line); border-radius:10px; padding:10px; }
+  figure canvas { width:100%; display:block; border-radius:6px; background:#000; }
+  figcaption { font-size:12px; color:var(--mut); margin-top:6px; display:flex; justify-content:space-between; }
+  .tag { font-weight:600; }
+  .tag.hit { color:#b91c1c; }
+  .tag.miss { color:#15803d; }
+  code { background:#eef2f7; padding:2px 6px; border-radius:4px; font-size:12px; }
+</style>
+</head>
+<body data-page-node-id="UBaMuf2cYdEXRrDvvHnvfx">
+
+<h1 data-page-node-id="TxZXuUSX5YrBkKHrtfM9Ui">行李 X 光刺激 · 静态效果图预览</h1>
+<div class="sub" data-page-node-id="US9E3aHDpUUiy0mjBx3FXp">
+   stimuli 全部由 canvas 程序化生成（半透明重叠灰度物体 + 噪声背景，依据 Wolfe, Horowitz &amp; Kenner 2005 的刺激描述）。
+   目标类别为<b data-page-node-id="gHJCHBqn1aZq29PdGB2GmM">刀</b>（宽刃水果刀 / 窄版菜刀构型：宽刀身 + 窄刀柄）；
+   干扰物中含钥匙、螺丝刀、剪刀、笔、筷子等<b data-page-node-id="av82otnVGZYUXPGmGlxizD">细长相似物</b>，
+   与螺丝刀的"细杆 + 粗柄"构成<b>轮廓反转</b>，避免目标"突现"。调完参数把数值告诉我即可。
+</div>
+
+<div class="panel" data-page-node-id="Cdva2iBM2h4iyGTLgkioCD">
+  <div class="controls" data-page-node-id="QlN59P0GjbrlGDnb9MLb2t">
+    <div class="ctl" data-page-node-id="Dhtizd7ZaCn2wJQu6J2GFl"><label data-page-node-id="UxeytHGI23i1hbAaZ79HeO">物体数量 <span class="val" id="vN" data-page-node-id="mfDEjCCytdhTzyPztmm1KO">12</span></label>
+      <input type="range" id="n" min="3" max="18" step="1" value="12" data-page-node-id="f1OKZ9vro7fipFvnRu8V3r"></div>
+    <div class="ctl" data-page-node-id="psGTWaUKh7Xs5oGmQT7Y1n"><label data-page-node-id="57QiIzQbIDtmutz2htrxDL">物体不透明度 <span class="val" id="vA" data-page-node-id="V33c0IuODhQsVXI1LBhvDH">0.62</span></label>
+      <input type="range" id="a" min="0.30" max="0.90" step="0.02" value="0.62" data-page-node-id="NTLJXBCQKFgTpZ4anOVXlZ"></div>
+    <div class="ctl" data-page-node-id="Yq61r8BoebGmupN8P7DBVS"><label data-page-node-id="tKqBjgQeJgzfoeiiK1V3SY">背景噪声强度 <span class="val" id="vZ" data-page-node-id="Xx7KavKXtWBI9AJfpD7wg2">26</span></label>
+      <input type="range" id="z" min="0" max="60" step="2" value="26" data-page-node-id="HqrCeKMoqVra0L7CWpa9Zt"></div>
+    <div class="ctl" data-page-node-id="bhxb3nVF8VjosVmdVDFnsj"><label data-page-node-id="7x21xpkGf1BqOYAc5FWW5T">随机旋转范围 ± <span class="val" id="vR" data-page-node-id="0dUkB2RPuIlHjbQEkfM6mW">20</span>°</label>
+      <input type="range" id="r" min="0" max="45" step="5" value="20" data-page-node-id="ws7cqAT3zTqHSIZyCxGepx"></div>
+    <div class="ctl" data-page-node-id="oA9KveR65IeE6Ly9Y4Yn8t"><label data-page-node-id="QzfF9POj6MletX9xZ5Nk9f">物体尺寸系数 <span class="val" id="vS" data-page-node-id="TZ9vbNevExef6J2Qk66Fll">1.00</span></label>
+      <input type="range" id="s" min="0.70" max="1.40" step="0.05" value="1.00" data-page-node-id="JspVugtVgEcDbvMAAiMPJn"></div>
+    <div class="ctl" data-page-node-id="pWLan8QBfRKgbCLhQMIN7g"><label data-page-node-id="clB0H8Xbp8qYSpvsTjyWgm">重叠遮挡程度 <span class="val" id="vO" data-page-node-id="QX95cqBl0Z9ZW4ju43r5OB">中</span></label>
+      <input type="range" id="o" min="0" max="2" step="1" value="1" data-page-node-id="DHuKwxHg8D21wF5fA4W7O9"></div>
+  </div>
+  <div class="row" data-page-node-id="VSUSjop6YewZpLGOQAg0tq">
+    <label class="chk" data-page-node-id="7LuGx48ceR3DysY46tX0Eu"><input type="checkbox" id="showTarget" checked data-page-node-id="kIncAVhXAJoMglJmhfADGW"> 显示目标位置（红圈）</label>
+    <label class="chk" data-page-node-id="MLCUHKTkPNzRccoq7pNSyF">随机种子 <input type="number" id="seed" value="1" data-page-node-id="LDMKFakAEcsL8UHuez7wFh"></label>
+    <button id="regen" data-page-node-id="Mdp2yphBPWQzIm5cIC2fzA">重新生成</button>
+    <button class="sec" id="reseed" data-page-node-id="4PRRRF9HXA9QYraVJqb2yc">换一批随机</button>
+    <span class="sub" style="margin:0" data-page-node-id="atAS3WWCgBPLQT2tA1ShWw">当前参数：<code id="params" data-page-node-id="ypnTjSHfjesGovG8wGDrAP"></code></span>
+  </div>
+</div>
+
+<div class="grid" id="grid" data-page-node-id="UtA406Vcn7jnf2Kt4QKHHB"></div>
+
+<script>
+"use strict";
+
+/* ---------- 可复现随机数 ---------- */
+function mulberry32(a) {
+  return function () {
+    a |= 0; a = (a + 0x6D2B79F5) | 0;
+    let t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+function makeRng(seed) {
+  const r = mulberry32(seed);
+  const rng = () => r();
+  rng.range = (lo, hi) => lo + r() * (hi - lo);
+  rng.int = (lo, hi) => Math.floor(lo + r() * (hi - lo + 1));
+  rng.pick = (arr) => arr[Math.floor(r() * arr.length)];
+  rng.sign = () => (r() < 0.5 ? -1 : 1);
+  return rng;
+}
+
+/* ---------- 物体形状（局部坐标单位盒，s = 半尺寸像素） ---------- */
+const SHAPES = {
+  knife(c, s) {                                   /* 目标：宽刃水果刀 / 窄版菜刀 */
+    /* 刀身：刀背平直、刀尖略钝、刃口带刀腹弧线；整体明显宽于螺丝刀杆 */
+    c.beginPath();
+    c.moveTo(-0.30 * s, -0.28 * s);
+    c.lineTo( 0.50 * s, -0.28 * s);
+    c.quadraticCurveTo(0.84 * s, -0.26 * s, 0.96 * s, -0.04 * s);
+    c.lineTo( 0.96 * s,  0.10 * s);
+    c.quadraticCurveTo(0.72 * s,  0.28 * s, 0.22 * s,  0.30 * s);
+    c.lineTo(-0.30 * s,  0.28 * s);
+    c.closePath(); c.fill();
+    /* 刀柄：明显比刀身窄 —— 与"细杆 + 粗柄"的螺丝刀形成轮廓反转 */
+    c.fillRect(-1.00 * s, -0.18 * s, 0.72 * s, 0.36 * s);
+  },
+  screwdriver(c, s) {                             /* 难干扰物：螺丝刀 */
+    c.fillRect(-0.10 * s, -0.038 * s, 0.92 * s, 0.076 * s);
+    c.beginPath();
+    c.moveTo(0.82 * s, -0.038 * s); c.lineTo(1.02 * s, 0); c.lineTo(0.82 * s, 0.038 * s);
+    c.closePath(); c.fill();
+    c.fillRect(-1.00 * s, -0.13 * s, 0.92 * s, 0.26 * s);
+  },
+  key(c, s) {                                     /* 钥匙 */
+    c.beginPath(); c.arc(-0.68 * s, 0, 0.24 * s, 0, Math.PI * 2); c.fill();
+    c.beginPath(); c.arc(-0.68 * s, 0, 0.10 * s, 0, Math.PI * 2);
+    c.globalCompositeOperation = "destination-out"; c.fill(); c.globalCompositeOperation = "source-over";
+    c.fillRect(-0.48 * s, -0.055 * s, 1.02 * s, 0.11 * s);
+    c.fillRect(0.24 * s, 0.05 * s, 0.09 * s, 0.20 * s);
+    c.fillRect(0.44 * s, 0.05 * s, 0.09 * s, 0.15 * s);
+  },
+  scissors(c, s) {                                /* 剪刀 */
+    c.save(); c.rotate(-0.22);
+    c.beginPath();
+    c.moveTo(-0.30 * s, -0.04 * s); c.lineTo(0.92 * s, -0.02 * s); c.lineTo(0.92 * s, 0.03 * s); c.lineTo(-0.30 * s, 0.05 * s);
+    c.closePath(); c.fill();
+    c.restore();
+    c.save(); c.rotate(0.22);
+    c.beginPath();
+    c.moveTo(-0.30 * s, -0.05 * s); c.lineTo(0.92 * s, -0.03 * s); c.lineTo(0.92 * s, 0.02 * s); c.lineTo(-0.30 * s, 0.04 * s);
+    c.closePath(); c.fill();
+    c.restore();
+    c.beginPath(); c.arc(-0.62 * s, 0.20 * s, 0.19 * s, 0, Math.PI * 2); c.fill();
+    c.beginPath(); c.arc(-0.62 * s, -0.20 * s, 0.19 * s, 0, Math.PI * 2); c.fill();
+  },
+  pen(c, s) {                                     /* 笔 */
+    c.fillRect(-0.95 * s, -0.05 * s, 1.55 * s, 0.10 * s);
+    c.beginPath();
+    c.moveTo(0.60 * s, -0.05 * s); c.lineTo(0.92 * s, 0); c.lineTo(0.60 * s, 0.05 * s);
+    c.closePath(); c.fill();
+    c.fillRect(-0.90 * s, -0.10 * s, 0.30 * s, 0.045 * s);
+  },
+  chopsticks(c, s) {                              /* 筷子 */
+    c.fillRect(-0.98 * s, -0.045 * s, 1.96 * s, 0.05 * s);
+    c.save(); c.rotate(0.10);
+    c.fillRect(-0.98 * s, 0.10 * s, 1.96 * s, 0.05 * s);
+    c.restore();
+  },
+  bottle(c, s) {                                  /* 瓶 */
+    c.beginPath();
+    const x0 = -0.36 * s, x1 = 0.36 * s, y0 = -0.95 * s, y1 = 0.52 * s, r = 0.18 * s;
+    c.moveTo(x0 + r, y0); c.lineTo(x1 - r, y0); c.quadraticCurveTo(x1, y0, x1, y0 + r);
+    c.lineTo(x1, y1 - r); c.quadraticCurveTo(x1, y1, x1 - r, y1);
+    c.lineTo(x0 + r, y1); c.quadraticCurveTo(x0, y1, x0, y1 - r);
+    c.lineTo(x0, y0 + r); c.quadraticCurveTo(x0, y0, x0 + r, y0);
+    c.closePath(); c.fill();
+    c.fillRect(-0.13 * s, 0.50 * s, 0.26 * s, 0.34 * s);
+    c.fillRect(-0.17 * s, 0.82 * s, 0.34 * s, 0.13 * s);
+  },
+  phone(c, s) {                                   /* 手机 */
+    const w = 0.44 * s, h = 0.88 * s, r = 0.12 * s;
+    c.beginPath();
+    c.moveTo(-w + r, -h); c.lineTo(w - r, -h); c.quadraticCurveTo(w, -h, w, -h + r);
+    c.lineTo(w, h - r); c.quadraticCurveTo(w, h, w - r, h);
+    c.lineTo(-w + r, h); c.quadraticCurveTo(-w, h, -w, h - r);
+    c.lineTo(-w, -h + r); c.quadraticCurveTo(-w, -h, -w + r, -h);
+    c.closePath(); c.fill();
+  },
+  brush(c, s) {                                   /* 梳子/刷 */
+    c.beginPath(); c.ellipse(0, -0.30 * s, 0.34 * s, 0.52 * s, 0, 0, Math.PI * 2); c.fill();
+    c.fillRect(-0.16 * s, 0.18 * s, 0.32 * s, 0.78 * s);
+  },
+  coin(c, s) {                                    /* 硬币 */
+    c.beginPath(); c.arc(0, 0, 0.52 * s, 0, Math.PI * 2); c.fill();
+    c.save(); c.globalCompositeOperation = "destination-out";
+    c.beginPath(); c.arc(0, 0, 0.20 * s, 0, Math.PI * 2); c.fill();
+    c.restore();
+  },
+  glasses(c, s) {                                 /* 眼镜 */
+    c.beginPath(); c.arc(-0.44 * s, 0, 0.30 * s, 0, Math.PI * 2); c.fill();
+    c.beginPath(); c.arc(0.44 * s, 0, 0.30 * s, 0, Math.PI * 2); c.fill();
+    c.fillRect(-0.16 * s, -0.05 * s, 0.32 * s, 0.10 * s);
+    c.fillRect(-0.98 * s, -0.10 * s, 0.56 * s, 0.06 * s);
+    c.fillRect(0.44 * s, -0.10 * s, 0.54 * s, 0.06 * s);
+  },
+  watch(c, s) {                                   /* 手表 */
+    c.beginPath(); c.arc(0, 0, 0.32 * s, 0, Math.PI * 2); c.fill();
+    c.fillRect(-0.16 * s, -0.98 * s, 0.32 * s, 0.70 * s);
+    c.fillRect(-0.16 * s, 0.30 * s, 0.32 * s, 0.70 * s);
+  }
+};
+
+/* 灰度（模拟 X 光下的材质密度）；数值越大越亮 */
+const GRAY = {
+  /* knife 原为 208。刀身加宽后填充面积约为原来的 3.8 倍（网格法实测 159→600 格），
+     若同时保持高亮度会变成"大而亮"的 pop-out，破坏低流行率效应所需的搜索难度，
+     故下调到 170（介于 watch 162 与 glasses 176 之间）。想恢复原亮度就改回 208。 */
+  knife: 170, screwdriver: 200, key: 196, scissors: 190, coin: 214,
+  glasses: 176, watch: 162, phone: 150, pen: 132, bottle: 108,
+  chopsticks: 112, brush: 100
+};
+const DISTRACTORS = Object.keys(SHAPES).filter(k => k !== "knife");
+
+/* ---------- 生成一张图 ---------- */
+function render(canvas, cfg, seed) {
+  const W = canvas.width, H = canvas.height, c = canvas.getContext("2d");
+  const rng = makeRng(seed);
+
+  /* 背景噪声 */
+  c.setTransform(1, 0, 0, 1, 0, 0);
+  c.globalAlpha = 1; c.globalCompositeOperation = "source-over";
+  c.fillStyle = "#111"; c.fillRect(0, 0, W, H);
+  const img = c.getImageData(0, 0, W, H), d = img.data, amp = cfg.noise;
+  const base = 118;
+  for (let i = 0; i < d.length; i += 4) {
+    const v = Math.max(0, Math.min(255, base + (rng() - 0.5) * 2 * amp));
+    d[i] = d[i + 1] = d[i + 2] = v; d[i + 3] = 255;
+  }
+  c.putImageData(img, 0, 0);
+
+  /* 行李的大块纹理，让画面不像纯噪声 */
+  for (let i = 0; i < 5; i++) {
+    const gx = rng.range(0, W), gy = rng.range(0, H), gr = rng.range(0.18, 0.45) * Math.min(W, H);
+    const g = c.createRadialGradient(gx, gy, 0, gx, gy, gr);
+    const shade = rng.range(-22, 22);
+    g.addColorStop(0, `rgba(${118 + shade},${118 + shade},${118 + shade},0.55)`);
+    g.addColorStop(1, "rgba(118,118,118,0)");
+    c.fillStyle = g; c.beginPath(); c.arc(gx, gy, gr, 0, Math.PI * 2); c.fill();
+  }
+
+  /* 布局：物体清单 */
+  const n = cfg.n;
+  const types = [];
+  for (let i = 0; i < n; i++) types.push(rng.pick(DISTRACTORS));
+  let targetIdx = -1;
+  if (cfg.target) {
+    /* 目标放在绘制顺序的后半段，避免被完全遮住 */
+    targetIdx = rng.int(Math.floor(n * 0.45), n - 1);
+    types.splice(targetIdx, 0, "knife");
+  }
+
+  /* 遮挡程度：0=分散 1=中 2=密集（位置抖动范围更小→更挤） */
+  const spread = [0.90, 0.78, 0.66][cfg.occl];
+  const baseSize = 0.115 * Math.min(W, H) * cfg.scale;
+  let tx = 0, ty = 0, tr = 0;
+
+  for (let i = 0; i < types.length; i++) {
+    const type = types[i];
+    const s = baseSize * rng.range(0.85, 1.15);
+    const x = W / 2 + (rng() - 0.5) * W * spread;
+    const y = H / 2 + (rng() - 0.5) * H * spread;
+    const rot = (rng.range(-cfg.rot, cfg.rot) * Math.PI) / 180;
+
+    c.save();
+    c.translate(x, y); c.rotate(rot);
+    c.globalAlpha = cfg.alpha;
+    c.fillStyle = `rgb(${GRAY[type]},${GRAY[type]},${GRAY[type]})`;
+    SHAPES[type](c, s);
+    c.restore();
+
+    if (type === "knife") { tx = x; ty = y; tr = s * 1.05; }
+  }
+
+  c.globalAlpha = 1;
+  if (cfg.showTarget && cfg.target) {
+    c.strokeStyle = "#ff2d2d"; c.lineWidth = 3; c.setLineDash([8, 6]);
+    c.beginPath(); c.arc(tx, ty, tr, 0, Math.PI * 2); c.stroke(); c.setLineDash([]);
+  }
+  return { tx, ty, tr };
+}
+
+/* ---------- 页面 ---------- */
+const grid = document.getElementById("grid");
+const ids = ["n", "a", "z", "r", "s", "o"];
+const vals = { n: "vN", a: "vA", z: "vZ", r: "vR", s: "vS", o: "vO" };
+const OCCL_TXT = ["低", "中", "高"];
+
+function readCfg() {
+  return {
+    n: +document.getElementById("n").value,
+    alpha: +document.getElementById("a").value,
+    noise: +document.getElementById("z").value,
+    rot: +document.getElementById("r").value,
+    scale: +document.getElementById("s").value,
+    occl: +document.getElementById("o").value,
+    showTarget: document.getElementById("showTarget").checked
+  };
+}
+
+function syncLabels() {
+  const cfg = readCfg();
+  document.getElementById("vN").textContent = cfg.n;
+  document.getElementById("vA").textContent = cfg.alpha.toFixed(2);
+  document.getElementById("vZ").textContent = cfg.noise;
+  document.getElementById("vR").textContent = cfg.rot;
+  document.getElementById("vS").textContent = cfg.scale.toFixed(2);
+  document.getElementById("vO").textContent = OCCL_TXT[cfg.occl];
+  document.getElementById("params").textContent =
+    `n=${cfg.n} alpha=${cfg.alpha.toFixed(2)} noise=${cfg.noise} rot=±${cfg.rot}° scale=${cfg.scale.toFixed(2)} occl=${OCCL_TXT[cfg.occl]}`;
+}
+
+function build() {
+  const cfg = readCfg();
+  syncLabels();
+  const seed0 = (+document.getElementById("seed").value) || 1;
+  grid.innerHTML = "";
+  /* 6 张含目标 + 6 张不含目标 */
+  for (let i = 0; i < 12; i++) {
+    const hasTarget = i < 6;
+    const fig = document.createElement("figure");
+    const cv = document.createElement("canvas");
+    cv.width = 640; cv.height = 480;
+    fig.appendChild(cv);
+    const cap = document.createElement("figcaption");
+    cap.innerHTML = `<span>样例 #${i + 1}</span><span class="tag ${hasTarget ? "hit" : "miss"}">${hasTarget ? "含目标（刀）" : "无目标"}</span>`;
+    fig.appendChild(cap);
+    grid.appendChild(fig);
+    render(cv, Object.assign({}, cfg, { target: hasTarget }), seed0 * 1000 + i * 37 + 7);
+  }
+}
+
+ids.forEach(id => document.getElementById(id).addEventListener("input", build));
+document.getElementById("showTarget").addEventListener("change", build);
+document.getElementById("regen").addEventListener("click", build);
+document.getElementById("reseed").addEventListener("click", () => {
+  const el = document.getElementById("seed");
+  el.value = String((+el.value || 0) + 1);
+  build();
+});
+build();
+</script>
+</body>
+</html>

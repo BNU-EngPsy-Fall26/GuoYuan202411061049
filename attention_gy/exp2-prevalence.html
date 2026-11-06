@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-page-node-id="1PXQlBesWHFOx0UhaH6LFQ">
+<head data-page-node-id="GsVj7YLaCNsVGOzcPO6w7n">
+<meta charset="utf-8" data-page-node-id="hwnZ9XpotZeFueCXqGckQi">
+<meta name="viewport" content="width=device-width,initial-scale=1" data-page-node-id="53QlElDOoeYWfOi3TomqJs">
+<title>实验二 · 低流行率视觉搜索</title>
+<link rel="stylesheet" href="css/style.css" data-page-node-id="nmigVNbfvjLdT1HxdRIndv">
+<link rel="icon" href="data:,">
+</head>
+<body data-page-node-id="Oa0b3IWdkABnCcEEUmHkmv">
+<div class="wrap" data-page-node-id="lg4rpeusQrFREHXCI5K1Yh">
+
+  <h1 data-page-node-id="gDDr8PMHKH3iaVL1CEtHag">实验二 · 低流行率视觉搜索</h1>
+  <div class="sub" data-page-node-id="vbiO2an0WNOTJr1rK4KY7q">在行李 X 光图里找「刀」。目标有时很常见，有时很罕见——这正是本实验关心的。全程约 8–10 分钟。</div>
+
+  <div class="card" id="intro" data-page-node-id="Uc8IOpeXPvHtGxPxdJRD5K">
+    <h2 style="margin-top:0" data-page-node-id="s6GyicNpH5Y6TPrJbNYvk9">你要做的事</h2>
+    <ul data-page-node-id="A9solffYdv9iWuCAkrIdQD">
+      <li data-page-node-id="ULyCwI2chNQxv83yx5x1bK">每屏是一张模拟的行李 X 光图，里面有若干半透明、互相重叠的物体。</li>
+      <li data-page-node-id="WMRN0RK8BbELdB4XOwJE3W">判断图里<b data-page-node-id="hY2gC9EEHiM6FdFC9EFgov">有没有刀</b>：有 → 按 <kbd data-page-node-id="LHGk0K3l6tjapmeEyOja3Y">Z</kbd>；没有 → 按 <kbd data-page-node-id="kRUmvHzW3OjVU3ZhqpvyMN">M</kbd>（也可以用屏幕上的按钮）。</li>
+      <li data-page-node-id="Aly5Ti7C7H0S3cLLQrGuGH">尽快作答，但也别乱按。有些条件下会告诉你答对没有，有些条件不会。</li>
+      <li data-page-node-id="yqXQENpZCkaNHzl4XpYjLp">一共 5 段，每段之间会提示你"下一段开始"，并有 5 秒休息。</li>
+    </ul>
+    <div class="warn" data-page-node-id="PElhi1DiKFu3PZDNnH2LAF">
+      说明：其中两段会额外插入一些<b data-page-node-id="jvQGEBSebGZ3CEclwvHBzO">虚构的目标图像</b>（也就是多放几把刀），这是实验设计的一部分，用来改变目标的出现频率。
+      它们的样子和真实目标完全一样，你不需要、也无法区分它们。
+    </div>
+    <h3>注视记录（可选，不影响作答）</h3>
+    <p class="note">本实验可以<b>可选</b>开启摄像头眼动，用来在结果页生成「注视热图 / 扫描路径回放」。<b>画面只在你自己的浏览器里本地处理，不录制、不上传</b>。开启后先做全屏 9 点校准 + 7 点精度自测（约 +1.5 分钟），实验过程中<b>不会</b>在画面上显示你的注视点——否则会改变你的搜索方式、污染数据。不选也能正常做完，只是这次不产生眼动图。</p>
+    <div class="actions">
+      <button id="btnCam" data-page-node-id="Z1tnlCjcCRG0gMz3bp7Mfa">开启摄像头眼动（先做 9 点校准）</button>
+      <button id="btnStart" class="sec">跳过，用鼠标方式直接开始</button>
+    </div>
+    <p class="note" id="camNote"></p>
+  </div>
+
+  <div class="card hidden" id="stageCard" data-page-node-id="N0E81aALW1aR7PySBuH7fz">
+    <div class="hud" data-page-node-id="l1WZACmucYoR3hGKwJYbEH">
+      <span data-page-node-id="XNR25Z69AzeN7cBlc8du9b">段 <b id="hBlock" data-page-node-id="uWDq1Nqz5CTavxKpwnCPyM">—</b></span>
+      <span data-page-node-id="sy3EhjMEpz6Bd8KtBBSbFF">本段试次 <b id="hTrial" data-page-node-id="UaD9vzKlF37Vz8Ksr5BKZU">—</b></span>
+      <span data-page-node-id="iGZv0hBI27KSZ0O4b4eT9D">总进度 <b id="hTotal" data-page-node-id="RFbD69RjJwxhPPDkBqsJ57">—</b></span>
+      <span id="hFeedback" data-page-node-id="PNQcrp78HluRkdOArxWbWP"></span>
+      <span id="hGaze" class="note"></span>
+    </div>
+    <div class="stage" style="position:relative" data-page-node-id="I17TgYZJTgDUAdItNEnYSp">
+      <canvas id="cv" width="720" height="540" data-page-node-id="CZto7V7vhFH82PnJyhdk43"></canvas>
+      <div class="overlay hidden" id="ov" data-page-node-id="18OCQ617DvAqYeuZeHbRcK"></div>
+    </div>
+    <div class="actions center" style="justify-content:center" data-page-node-id="j92C9WjRcdiB6FcYxrBACP">
+      <button id="btnYes" data-page-node-id="EfWJkBzmwGbey6yZVEu1gn">有刀（Z）</button>
+      <button id="btnNo" class="sec" data-page-node-id="8BXsqSx9OxyPlGocAToTGk">没刀（M）</button>
+    </div>
+    <p class="hint center" data-page-node-id="3GfaEYQBGlR0Lwkb0N5yuv">或直接用键盘：<kbd data-page-node-id="htYlcz8iJBzkyTNgSzYeL7">Z</kbd> = 有刀，<kbd data-page-node-id="jfosfAFwANzSTTaC06CONE">M</kbd> = 没刀</p>
+  </div>
+
+  <div class="card" id="result" data-page-node-id="EegLprSYBY8nUurtShQCIG"></div>
+
+</div>
+
+<script src="js/common.js"></script>
+<script src="js/gaze.js"></script>
+<script src="js/analysis.js"></script>
+<script src="js/personal.js"></script>
+<script src="js/xray.js"></script>
+<script>
+(function () {
+  'use strict';
+  var HW = window.HW;
+  var sess = HW.requireSession();
+  if (!sess) return;
+
+  /* =========================================================
+     Block 设计（见设计方案 §3.3）
+     ========================================================= */
+  var BLOCKS = {
+    1: { id:1, label:'高流行率基线', n:20, real:10, inserted:0, feedback:true,  fixed:true },
+    2: { id:2, label:'低流行率 · 控制', n:30, real:5, inserted:0, feedback:false },
+    3: { id:3, label:'仅插入虚拟目标', n:33, real:5, inserted:3, feedback:false },
+    4: { id:4, label:'仅反馈',        n:30, real:5, inserted:0, feedback:true  },
+    5: { id:5, label:'完整 TIP',      n:33, real:5, inserted:3, feedback:true  }
+  };
+  /* 4×4 拉丁方：block 1 固定最前，2–5 顺序在被试间平衡 */
+  var LS = [
+    [2,3,4,5],
+    [3,5,2,4],
+    [4,2,5,3],
+    [5,4,3,2]
+  ];
+
+  var seed = HW.seedFrom(sess.id, 'prevalence');
+  var rng = HW.makeRng(seed);
+  var order = [1].concat(LS[seed % 4]);
+
+  /* =========================================================
+     试次清单
+     ========================================================= */
+  var trials = [];
+  var g = 0;
+  order.forEach(function (bid) {
+    var B = BLOCKS[bid];
+    /* kinds 先按"真实目标 / 插入目标 / 无目标"造好，再整体洗牌。
+       （v1 是先洗牌再按索引切分，会把插入标记错配到真实目标上——已修） */
+    var kinds = [];
+    for (var a = 0; a < B.real; a++) kinds.push('real');
+    for (var b = 0; b < B.inserted; b++) kinds.push('inserted');
+    for (var c = 0; c < B.n - B.real - B.inserted; c++) kinds.push('absent');
+    kinds = rng.shuffle(kinds);
+    for (var i = 0; i < B.n; i++) {
+      g++;
+      trials.push({
+        block: bid,
+        blockLabel: B.label,
+        trialInBlock: i + 1,
+        global: g,
+        targetPresent: kinds[i] !== 'absent',
+        inserted: kinds[i] === 'inserted',
+        feedback: B.feedback,
+        practice: false,
+        nObjects: [6,9,12][Math.floor(rng() * 3)]
+      });
+    }
+  });
+
+  /* 练习：6 试次，50% 流行率，有反馈 */
+  var practice = [];
+  for (var p = 0; p < 6; p++) {
+    practice.push({
+      block: 0, blockLabel:'练习', trialInBlock: p+1, global: -(p+1),
+      targetPresent: p < 3, inserted:false, feedback:true, practice:true,
+      nObjects: 6
+    });
+  }
+  var queue = practice.concat(trials);
+  var qi = 0;
+
+  /* =========================================================
+     状态
+     ========================================================= */
+  var startedAt = null;
+  var stimulusOnset = 0;
+  var awaiting = false;
+  var finished = false;
+  var records = [];
+
+  /* ---------- 眼动采集（可选） ----------
+     与实验一复用 js/gaze.js，但有两个方法学差异：
+       1) 视觉搜索任务里【不】实时显示注视点：被试若看见自己的目光会改变搜索
+          策略、污染数据。只在 HUD 放一个极小的「记录中」指示。
+       2) 逐试次记录抽稀后的注视坐标，供结果页画热图 / 扫描回放。
+     采样 10 Hz，每试次最多保留 14 点：146 试次 × 14 点 ≈ 40 KB，
+     远低于接口单次 256 KB 上限，不会被 postPayload 裁掉。 */
+  var GAZE_HZ = 10;
+  var GAZE_MAX = 14;
+  var FIX_RADIUS_MUL = 1.35;       /* 「注视落在刀上」的近似半径倍率（考虑网页眼动误差） */
+  var gazeMode = 'none';           /* 'webgazer' | 'mouse' | 'none' */
+  var gazePrecisionPx = null;
+  var gazeErr = null;
+  var gazeBuf = [];
+  var gazeTimer = null;
+
+  function thinPath(buf) {
+    if (buf.length <= GAZE_MAX) return buf;
+    var out = [], step = (buf.length - 1) / (GAZE_MAX - 1);
+    for (var i = 0; i < GAZE_MAX; i++) out.push(buf[Math.round(i * step)]);
+    return out;
+  }
+
+  function startGazeCapture() {
+    gazeBuf = [];
+    if (gazeTimer) clearInterval(gazeTimer);
+    if (gazeMode !== 'webgazer' || !window.Gaze) return;
+    gazeTimer = setInterval(function () {
+      if (!awaiting) return;
+      var p = window.Gaze.point;
+      if (!p || !isFinite(p.x) || !isFinite(p.y)) return;
+      var t = Math.round((HW.now() - stimulusOnset) / 10) * 10;
+      gazeBuf.push([Math.round(p.x), Math.round(p.y), t]);
+    }, 1000 / GAZE_HZ);
+  }
+
+  function stopGazeCapture() {
+    if (gazeTimer) { clearInterval(gazeTimer); gazeTimer = null; }
+  }
+
+  /* 是否有注视点落在刀的目标区域内：
+     仅用目标外接半径 ×1.35 做粗略近似，不是精确 AOI；结果页会写明。 */
+  function targetFixated(info) {
+    if (!info || !isFinite(info.tr) || info.tr <= 0) return false;
+    var R = info.tr * FIX_RADIUS_MUL;
+    for (var i = 0; i < gazeBuf.length; i++) {
+      var dx = gazeBuf[i][0] - info.tx, dy = gazeBuf[i][1] - info.ty;
+      if (dx * dx + dy * dy <= R * R) return true;
+    }
+    return false;
+  }
+
+  var cv = document.getElementById('cv');
+  var ctx = cv.getContext('2d');
+  var ov = document.getElementById('ov');
+
+  function draw(t) {
+    /* t.targetPresent 时画刀；showTarget 仅在反馈阶段用 */
+    var cfg = {
+      n: t.nObjects,
+      alpha: 0.62,
+      noise: 26,
+      rot: 20,
+      scale: 1.00,
+      occl: 1,
+      target: t.targetPresent,
+      showTarget: false
+    };
+    var seedT = (seed ^ (t.global * 2654435761)) >>> 0;
+    t._seed = seedT;          /* 结果页按同一种子重绘同一张行李图 */
+    return window.XRay.render(cv, cfg, seedT);
+  }
+
+  function blank() {
+    ctx.fillStyle = '#0d0f12';
+    ctx.fillRect(0, 0, cv.width, cv.height);
+  }
+
+  function showOverlay(title, lines, btnText, onBtn) {
+    ov.innerHTML = '';
+    var h = document.createElement('h2'); h.textContent = title; ov.appendChild(h);
+    (lines || []).forEach(function (t) {
+      var p = document.createElement('p'); p.innerHTML = t; ov.appendChild(p);
+    });
+    if (btnText) {
+      var b = document.createElement('button');
+      b.textContent = btnText;
+      b.addEventListener('click', function () { ov.classList.add('hidden'); onBtn && onBtn(); });
+      ov.appendChild(b);
+    }
+    ov.classList.remove('hidden');
+  }
+
+  /* ---------- 段间提示 ---------- */
+  function blockIntro(t, next) {
+    var B = BLOCKS[t.block] || { label:'练习' };
+    var lines = [];
+    if (t.practice) {
+      lines.push('先做 <b>6 次练习</b>，让你熟悉图和按键。练习不计入结果。');
+    } else {
+      lines.push('第 <b>' + order.indexOf(t.block) + '</b> / 5 段：' + B.label + '，共 <b>' + B.n + '</b> 次。');
+      lines.push(B.feedback ? '这一段<b>每次都会告诉你答对没有</b>。' : '这一段<b>不会</b>告诉你答对没有。');
+    }
+    showOverlay(t.practice ? '练习' : ('第 ' + order.indexOf(t.block) + ' 段 / 共 5 段'), lines, '开始', next);
+  }
+
+  /* ---------- 呈现一个试次 ---------- */
+  function nextTrial() {
+    if (qi >= queue.length) { finish(); return; }
+    var t = queue[qi];
+
+    /* 新段开始 → 提示（练习或正式段的第一试次） */
+    var isBlockStart = (qi === 0) || (queue[qi - 1].block !== t.block);
+    if (isBlockStart) {
+      blockIntro(t, function () { presentTrial(t); });
+      return;
+    }
+    presentTrial(t);
+  }
+
+  function presentTrial(t) {
+    var info = draw(t);
+    document.getElementById('hBlock').textContent = t.practice ? '练习' : (order.indexOf(t.block) + '/5 ' + t.blockLabel);
+    document.getElementById('hTrial').textContent = t.trialInBlock + ' / ' + (BLOCKS[t.block] ? BLOCKS[t.block].n : 6);
+    document.getElementById('hTotal').textContent = Math.max(0, qi - 5) + ' / ' + trials.length;
+    document.getElementById('hFeedback').textContent = t.feedback ? '本段有反馈' : '本段无反馈';
+    awaiting = true;
+    stimulusOnset = HW.now();
+    t._info = info;
+    startGazeCapture();
+  }
+
+  function respond(said) {
+    if (!awaiting) return;
+    awaiting = false;
+    stopGazeCapture();
+    var t = queue[qi];
+    var rt = HW.now() - stimulusOnset;
+    var correct = (said === 1) === t.targetPresent;
+    var path = thinPath(gazeBuf);
+    var info = t._info || {};
+    var fixated = t.targetPresent ? targetFixated(info) : false;
+
+    if (!t.practice) {
+      records.push({
+        cond: t.blockLabel,                 /* 接口标准键 */
+        rt: Math.round(rt * 10) / 10,       /* 接口标准键 */
+        block: t.block,
+        blockLabel: t.blockLabel,
+        blockOrderPos: order.indexOf(t.block),
+        trialInBlock: t.trialInBlock,
+        global: t.global,
+        nObjects: t.nObjects,
+        targetPresent: t.targetPresent,
+        inserted: t.inserted,
+        feedback: t.feedback,
+        response: said ? 'present' : 'absent',
+        correct: correct,
+        rt_ms: Math.round(rt * 10) / 10,
+        t_onset_ms: Math.round(stimulusOnset),
+        gaze_source: gazeMode,
+        gaze_path: path,
+        gaze_n: path.length,
+        stimulus_seed: t._seed,
+        target_x: Math.round(info.tx) || 0,
+        target_y: Math.round(info.ty) || 0,
+        target_r: Math.round(info.tr) || 0,
+        target_fixated: fixated
+      });
+    }
+
+    if (t.feedback) {
+      /* 反馈：1.2 s 结果 + 目标位置高亮 */
+      var d = draw(t);
+      if (t.targetPresent) {
+        ctx.strokeStyle = '#ff2d2d'; ctx.lineWidth = 3; ctx.setLineDash([8,6]);
+        ctx.beginPath(); ctx.arc(d.tx, d.ty, d.tr, 0, Math.PI*2); ctx.stroke(); ctx.setLineDash([]);
+      }
+      ctx.save();
+      ctx.fillStyle = correct ? 'rgba(21,128,61,.92)' : 'rgba(185,28,28,.92)';
+      ctx.fillRect(0, cv.height - 54, cv.width, 54);
+      ctx.fillStyle = '#fff';
+      ctx.font = '600 20px -apple-system,"Microsoft YaHei",sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText(correct ? '正确' : (t.targetPresent ? '漏报：这里有刀' : '虚报：这里没有刀'),
+                   cv.width/2, cv.height - 20);
+      ctx.restore();
+      setTimeout(function () { blank(); setTimeout(advance, 120); }, 1200);
+    } else {
+      blank();
+      setTimeout(advance, 250);
+    }
+  }
+
+  function advance() {
+    qi++;
+    if (qi >= queue.length) { finish(); return; }
+    var t = queue[qi];
+    var isBlockStart = (queue[qi - 1].block !== t.block);
+    if (isBlockStart) {
+      /* 段间 5 秒休息 + 提示（提示里带"开始"按钮，实际休息时间由提示页承担） */
+      blockIntro(t, function () { presentTrial(t); });
+    } else {
+      presentTrial(t);
+    }
+  }
+
+  /* ---------- 键盘 ---------- */
+  document.addEventListener('keydown', function (e) {
+    if (!awaiting) return;
+    var k = e.key.toLowerCase();
+    if (k === 'z') respond(1);
+    else if (k === 'm') respond(0);
+  });
+  document.getElementById('btnYes').addEventListener('click', function () { respond(1); });
+  document.getElementById('btnNo').addEventListener('click', function () { respond(0); });
+
+  /* =========================================================
+     结束与统计
+     ========================================================= */
+  function blockStats(bid) {
+    var rs = records.filter(function (r) { return r.block === bid; });
+    var hits=0, misses=0, fa=0, cr=0, hitRT=[], crRT=[], insHits=0, insTot=0;
+    rs.forEach(function (r) {
+      if (r.targetPresent && !r.inserted) {
+        if (r.response === 'present') { hits++; hitRT.push(r.rt_ms); } else misses++;
+      } else if (!r.targetPresent) {
+        if (r.response === 'present') fa++; else { cr++; crRT.push(r.rt_ms); }
+      } else { /* inserted */
+        insTot++; if (r.response === 'present') insHits++;
+      }
+    });
+    var s = HW.sdt(hits, misses, fa, cr);
+    s.block = bid;
+    s.blockLabel = BLOCKS[bid].label;
+    s.nTrials = rs.length;
+    s.missRate = (hits + misses) ? misses / (hits + misses) : NaN;
+    s.hitRT = HW.mean(hitRT);
+    s.crRT = HW.mean(crRT);
+    s.insertedHitRate = insTot ? insHits / insTot : NaN;
+    s.nInserted = insTot;
+    s.feedback = BLOCKS[bid].feedback;
+    return s;
+  }
+
+  function finish() {
+    if (finished) return;
+    finished = true;
+    stopGazeCapture();
+    try { if (window.Gaze) window.Gaze.stop(); } catch (e) { /* 未初始化时忽略 */ }
+    document.getElementById('stageCard').classList.add('hidden');
+    blank();
+
+    var stats = order.filter(function (b) { return b !== 1; }).concat([1]).map(blockStats);
+    var by = {};
+    stats.forEach(function (s) { by[s.block] = s; });
+
+    var rows = [];
+    var nGaze = records.filter(function (r) { return r.gaze_n > 0; }).length;
+    rows.push(['眼动记录', gazeMode === 'webgazer'
+      ? ('摄像头眼动 · 精度自测平均误差 ' + HW.fmt1(gazePrecisionPx) + ' px · ' + nGaze + ' / ' + records.length + ' 个试次有注视路径')
+      : '未启用（鼠标方式，本次不产生眼动图）']);
+    stats.slice().sort(function (a, b) { return a.block - b.block; }).forEach(function (s) {
+      rows.push(['第 ' + s.block + ' 段 · ' + s.blockLabel + '（' + (s.feedback ? '有反馈' : '无反馈') + '）', '']);
+      rows.push(['　漏报率（主指标）', HW.fmtPct(s.missRate * 100)]);
+      rows.push(['　虚报率', HW.fmtPct(s.faRate * 100)]);
+      rows.push(['　命中 RT / 正确拒斥 RT', HW.fmt1(s.hitRT) + ' ms / ' + HW.fmt1(s.crRT) + ' ms']);
+      rows.push(['　d′ / 判定标准 c', HW.fmt1(s.dPrime) + ' / ' + HW.fmt1(s.c)]);
+      if (s.nInserted) rows.push(['　插入目标命中率（操纵检验）', HW.fmtPct(s.insertedHitRate * 100) + '（' + s.nInserted + ' 个）']);
+    });
+
+    /* 2×2 对比（只统计真实目标试次） */
+    function mr(b) { return by[b] ? by[b].missRate : NaN; }
+    var insertAbsent = ((mr(2) + mr(4)) / 2);
+    var insertPresent = ((mr(3) + mr(5)) / 2);
+    var fbAbsent = ((mr(2) + mr(3)) / 2);
+    var fbPresent = ((mr(4) + mr(5)) / 2);
+    rows.push(['— 2×2 对比（漏报率）—', '']);
+    rows.push(['　插入主效应：不插入 vs 插入', HW.fmtPct(insertAbsent*100) + ' → ' + HW.fmtPct(insertPresent*100)]);
+    rows.push(['　反馈主效应：无反馈 vs 有反馈', HW.fmtPct(fbAbsent*100) + ' → ' + HW.fmtPct(fbPresent*100)]);
+    rows.push(['　交互：插入的收益（无反馈 / 有反馈）',
+                HW.fmtPct((mr(2)-mr(3))*100) + ' / ' + HW.fmtPct((mr(4)-mr(5))*100)]);
+    rows.push(['　复现检验：第1段（50%）vs 第2段（低流行率）',
+                HW.fmtPct(mr(1)*100) + ' vs ' + HW.fmtPct(mr(2)*100)]);
+
+    HW.finishPage({
+      experiment: 'prevalence',
+      title: '低流行率视觉搜索',
+      trials: records,
+      rows: rows,
+      meta: {
+        startedAt: startedAt,
+        blockOrder: order,
+        latinRow: seed % 4,
+        design: BLOCKS,
+        prevalence: { block1: 10/20, block2: 5/30, block3: 8/33, block4: 5/30, block5: 8/33 },
+        stimulus: 'canvas 程序化生成的行李 X 光图；目标 = 刀（宽刃水果刀构型）；物体半透明重叠于噪声背景（依 Wolfe et al., 2005）',
+        gaze: {
+          source: gazeMode,
+          precisionPx: gazePrecisionPx,
+          precisionRaw: window.Gaze ? window.Gaze.precisionRaw : null,
+          sampleHz: GAZE_HZ,
+          maxPointsPerTrial: GAZE_MAX,
+          fixRadiusMul: FIX_RADIUS_MUL,
+          note: 'WebGazer 网页端摄像头眼动估计，非眼动仪；仅供探索性可视化，不用于统计推断；视觉搜索期间不显示注视点以免改变搜索策略'
+        }
+      },
+      nextHref: 'exp3-attitude.html',
+      nextLabel: '进入实验三 · 姿态仪',
+      note: '上面只是你这一个被试的描述统计。作业要求的是跨被试聚合后的结论——单个被试的目标试次太少（30 次里只有 5 个目标），不足以做推断。'
+    });
+    if (window.Personal) window.Personal.render('prevalence', records);
+  }
+
+  /* ---------- 启动 ---------- */
+  /* 一屏自适应：canvas 内部分辨率不变，显示尺寸按视口等比缩小，
+     进入实验时整块画面（含提示）一屏完整呈现，无需滚动。 */
+  function fitStage() {
+    var card = document.getElementById('stageCard');
+    if (!card || card.classList.contains('hidden')) return;
+    var W = cv.width, H = cv.height;
+    var scale = Math.min(1, (window.innerWidth - 56) / W, (window.innerHeight - 130) / H);
+    function apply() {
+      cv.style.width = Math.round(W * scale) + 'px';
+      cv.style.height = Math.round(H * scale) + 'px';
+      cv.style.margin = '0 auto';
+    }
+    apply();
+    var over = document.documentElement.scrollHeight - window.innerHeight;
+    if (over > 0) scale = Math.max(0.2, scale - over / H);
+    apply();
+  }
+  window.addEventListener('resize', fitStage);
+
+  /* ---------- 注视方式选择（与实验一同款，严格互斥） ---------- */
+  function loadScript(src, cb) {
+    var s = document.createElement('script');
+    s.src = src;
+    s.onload = function () { cb(true); };
+    s.onerror = function () { cb(false); };
+    document.head.appendChild(s);
+  }
+
+  function onGazeReady(mode, prec, err) {
+    gazeMode = mode; gazePrecisionPx = prec; gazeErr = err;
+    HW.store.set('gazeMode', mode);
+    var h = document.getElementById('hGaze');
+    var cn = document.getElementById('camNote');
+    if (mode === 'webgazer') {
+      h.textContent = '眼动记录中 ●';
+      h.style.color = 'var(--ok)';
+      startTask();
+    } else if (err) {
+      /* 摄像头失败：明确报错，不静默开始，把选择权交还被试 */
+      h.textContent = '眼动未启用';
+      cn.textContent = '⚠ 摄像头眼动未能启动：' + err + '。可以点「跳过，用鼠标方式直接开始」继续（本次不产生眼动图），或检查权限后重试。';
+      cn.style.color = '#ff6b6b';
+      document.getElementById('btnCam').disabled = false;
+      document.getElementById('btnCam').textContent = '重试摄像头眼动';
+    } else {
+      h.textContent = '未记录眼动';
+      h.style.color = '';
+      startTask();
+    }
+  }
+
+  function beginWithCamera() {
+    document.getElementById('btnCam').disabled = true;
+    var cn = document.getElementById('camNote');
+    cn.style.color = '';
+    cn.textContent = '正在加载眼动库…';
+    loadScript('vendor/webgazer/webgazer.js', function (ok) {
+      if (!ok) {
+        cn.textContent = '⚠ 眼动库加载失败（脚本可能未下载完整），请刷新页面重试，或点「跳过」用鼠标方式继续。';
+        cn.style.color = '#ff6b6b';
+        document.getElementById('btnCam').disabled = false;
+        return;
+      }
+      cn.textContent = '眼动库已加载，请按屏幕提示完成全屏 9 点校准。';
+      window.Gaze.init(cv, true, function (msg) { cn.textContent = msg; }, onGazeReady);
+    });
+  }
+
+  function beginWithMouse(forcedErr) {
+    window.Gaze.init(cv, false, function () {}, function (mode, prec, err) {
+      onGazeReady(mode, prec, forcedErr || err);
+    });
+  }
+
+  function startTask() {
+    document.getElementById('intro').classList.add('hidden');
+    var h1 = document.querySelector('h1');
+    var sub = document.querySelector('.sub');
+    if (h1) h1.classList.add('hidden');
+    if (sub) sub.classList.add('hidden');
+    document.body.classList.add('task-running');
+    document.getElementById('stageCard').classList.remove('hidden');
+    fitStage();
+    startedAt = HW.iso();
+    nextTrial();
+  }
+
+  document.getElementById('btnCam').addEventListener('click', beginWithCamera);
+  /* 包一层：直接传 beginWithMouse 会把 MouseEvent 当成降级原因参数 */
+  document.getElementById('btnStart').addEventListener('click', function () { beginWithMouse(); });
+
+  if (!sess.camera) {
+    document.getElementById('btnCam').disabled = true;
+    var cn0 = document.getElementById('camNote');
+    cn0.textContent = '⚠ 你在知情同意页未勾选「使用摄像头」，因此无法启用眼动。如需眼动请返回首页重新同意；或直接点「跳过，用鼠标方式直接开始」。';
+    cn0.style.color = '#ff6b6b';
+  }
+
+  /* 自动化校验钩子：无头浏览器可注入注视点 / 强制模式，不参与正常流程 */
+  window.__exp2 = {
+    setGazeMode: function (m) { gazeMode = m; },
+    setGaze: function (p) { if (window.Gaze) window.Gaze.point = p; },
+    getRecords: function () { return records; },
+    getGazeMode: function () { return gazeMode; },
+    getQueue: function () { return queue; },
+    getQi: function () { return qi; },
+    jumpTo: function (i) { qi = i; nextTrial(); },
+    restartCapture: function () { startGazeCapture(); },
+    getDebug: function () {
+      return { awaiting: awaiting, gazeMode: gazeMode, buf: gazeBuf.length,
+        timer: !!gazeTimer, point: window.Gaze ? window.Gaze.point : null };
+    },
+    GAZE_HZ: GAZE_HZ, GAZE_MAX: GAZE_MAX
+  };
+})();
+</script>
+</body>
+</html>

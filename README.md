@@ -31,7 +31,7 @@ css/style.css           统一样式
 vendor/webgazer/        自托管 WebGazer（GPLv3）与其 MediaPipe FaceMesh 模型
 ```
 
-**运行**：必须是 **https 或 localhost**（`getUserMedia` 需要安全上下文；直接双击用 `file://` 打开时摄像头不可用，但会自动降级为鼠标方式，实验照常能做完）。
+**运行**：必须是 **https 或 localhost**（`getUserMedia` 需要安全上下文；直接双击用 `file://` 打开时摄像头不可用，但会自动降级为鼠标方式，实验照常能做完）。直接复制“https://bnu-engpsy-fall26.github.io/GuoYuan202411061049/attention_gy/index.html”在浏览器中打开即可开始实验。
 
 本地预览：
 
@@ -41,7 +41,6 @@ python -m http.server 8000     # 然后打开 http://localhost:8000
 
 **部署**：整站静态，可直接放 GitHub Pages（默认 HTTPS）。
 
-> **本地预览的两个坑（2026-11-04 实测）**：① `file://` 直接双击打开时 `getUserMedia` 不可用（浏览器安全上下文的硬规则，无法绕过），眼动会降级为鼠标；必须用 `http://localhost` / `http://127.0.0.1` 或 HTTPS。本自托管的 `webgazer.js` 已 patch 掉它对 `127.0.0.1` 误弹的 "works only over https" 假警告。② Python 的 `http.server` 是单线程的，传 1.8 MB 的 `webgazer.js` 与 6 MB 的 wasm 模型时偶发返回空内容（实测抓到过），会让 `window.webgazer` 变成 undefined。若遇此情况，改用支持并发的静态服务器或硬刷新重试。摄像头启动失败现在**不再静默降级**，实验页会显示红色报错原因与「重试」按钮。
 
 **数据接口**：POST 到注意实验室收集端点 `https://attention-lab-production.up.railway.app/api/hw2/submit`（项目码 `HV5WV3`）。payload 为接口模板要求的 `{ project, experiment, participant, condition, trials: [{cond, rt, correct}, …] }`，每条试次记录在标准键之外附带该实验的完整明细字段；按收集页要求**不上传姓名、学号**（被试只有匿名编号）。接口规则（以 /hw2 页面为准）：单次提交 ≤ 256 KB、≤ 2000 试次、同一网络每分钟 ≤ 30 次；响应在 JSON body 里给 `{ok: true/false, msg}`（HTTP 恒为 200），代码按 body.ok 判定成败，拒绝时提示 msg 并把数据留在本地队列。提交成功即从重试队列出队，避免重复上传。端点写在 `js/common.js` 顶部，如需指向其他地址，在加载该文件**之前**设置 `window.HW_API_BASE` 即可。全体被试匿名数据可经 `GET /api/hw2/data?project=HV5WV3&experiment=<实验名>` 读取（分析脚本用）。  
 Payload 形如：
@@ -68,10 +67,6 @@ Payload 形如：
 
 **注视来源（严格互斥 + 自动降级，2026-11-04 修正）。** 选用摄像头并完成校准后，AOI 清晰化**只由 WebGazer 的注视预测驱动，鼠标完全不参与**；未选用摄像头、或摄像头确实不可用时，才**只由鼠标位置**驱动。两种方式绝不同时写 `Gaze.point`。
 
-> **修正前的 bug（共两层）**：
->
-> 1. `Gaze.init()` 原先无条件调用 `initMouse()`，而 `initMouse()` 会把 `Gaze.mode` 重置为 `mouse` 并注册 `mousemove`/`mouseleave`。结果是摄像头校准成功后，鼠标事件持续覆盖眼动预测点、`mouseleave` 还会把预测点清成 `null`。已改为严格互斥。
-> 2. **更隐蔽的一层（2026-11-04 查明）**：本自托管构建的 `webgazer.begin()` **内部不会调用 `addMouseEventListeners()`**，所以 `click`/`mousemove` 这两个训练监听默认根本没注册。结果是校准时 WebGazer 拿不到任何训练样本，回归模型为空 → 预测永远无效 → 内部 `gazeCount` 恒为 0 → 被 `if (gazeCount === 0) throw` 误判为"未检测到人脸"而**静默降级为鼠标**。表现就是"校准完了仪表还是跟鼠标走"。修复：在 `begin()` 成功后显式调用 `webgazer.addMouseEventListeners()`，并在每个校准红点被点击时用 `webgazer.recordScreenPosition(x, y, 'click')` 显式喂训练样本；校准结束再 `removeMouseEventListeners()`。
 
 实现要点：
 
@@ -96,7 +91,7 @@ Payload 形如：
 ---
 
 
-## 3. 实验二 · 低流行率视觉搜索 —— TIP 2×2（**收数据的新条件**）
+## 3. 实验二 · 低流行率视觉搜索 —— TIP 2×2
 
 **复现的现象。** Wolfe, Horowitz & Kenner (2005, *Nature*)：目标越罕见，漏得越多。该文实测三档流行率 **1% / 10% / 50% → 漏报 30% / 16% / 7%**。
 
@@ -171,13 +166,13 @@ Block 1 固定最前，2–5 用 4×4 拉丁方在被试间平衡；目标为**�
 ### 6.1 怎么收集 ≥ 5 名他人的数据
 
 1. 把整站部署到 GitHub Pages（默认 HTTPS，`getUserMedia` 可用）；
-2. 把 `index.html` 链接发给同学，**每人一个匿名编号**（P01…P10），不收集姓名/学号；
+2. 把 `https://bnu-engpsy-fall26.github.io/GuoYuan202411061049/attention_gy/index.html` 链接发给同学，**每人一个匿名编号**（P01…P10），不收集姓名/学号；
 3. 每人按 SEEV → 低流行率 → 姿态仪 的顺序做完，浏览器自动把试次 POST 到 `/api/hw2/submit`；
 4. 在结果页点「从实验室接口读取全体数据」，或到 /hw2 页用下载密钥导出 CSV 后上传。
 
 接口 `GET /api/hw2/data?project=HV5WV3[&experiment=seev|prevalence|attitude]` 可匿名读回本项目全体记录。结果页同时拉四个 URL（全体 + 三个实验分表）再做全局去重，兼容 `{ok, records}`、payload 数组、本机导出 JSON、CSV、`trials` 为 JSON 字符串等多种形态；`test_` 调试数据默认排除。
 
-> ⚠️ **去重键必须包含实验内单元**（`condition / block / segment`）：真站点的 `global` 是全场序号，但 CSV 导出或「block 内序号」只在单元内唯一，只按 `_exp|_pid|序号` 去重会跨单元误删试次（2026-11-04 修复：演示数据曾被误删 1381/2020 条，导致实验二效应全为空）。
+> ⚠️ **去重键必须包含实验内单元**（`condition / block / segment`）：真站点的 `global` 是全场序号，但 CSV 导出或「block 内序号」只在单元内唯一，只按 `_exp|_pid|序号` 去重会跨单元误删试次。
 
 ### 6.2 页面给出什么
 
@@ -233,47 +228,3 @@ Block 1 固定最前，2–5 用 4×4 拉丁方在被试间平衡；目标为**�
 | Sternberg, S. (1966). High-speed scanning in human memory. *Science*, 153(3736), 652–654. DOI: 10.1126/science.153.3736.652                                                                                                               | ✅已核原文摘要（结果页 SSTS 预测线的理论出处；**跨范式类比外推，非复现**，见 §6.3） |
 
 **第三方许可**：`vendor/webgazer/` 为 [WebGazer](https://github.com/brownhci/WebGazer)（Brown HCI 组），许可 **GPLv3**（估值 <$10M 的组织可用 LGPLv3）。此处**已改为自托管**：MediaPipe FaceMesh 模型与 wasm 均存于项目内的 `vendor/webgazer/mediapipe/face_mesh/`，默认 tracker 走 `webgazer.params.faceMeshSolutionPath` 的**相对路径**，不请求 tfhub 或任何 CDN。
-
----
-
-
-## 8. 本轮正式收数范围与动态导航
-
-作业要求「至少一个实验收集真实被试」。本轮**只收实验二（prevalence）与实验三（attitude）**；实验一（SEEV 价值操控 + WebGazer 摄像头眼动）保留为方法演示，被试可自愿体验，但不计入本次收数，也不需要摄像头。三个实验的设计与页面都在，差别只是收数范围。
-
-**实现**：`js/common.js` 里的 `HW.RUN_PLAN` 默认 `['prevalence','attitude']`，首页与三个结束页共用：
-
-- `HW.planStatus()`：三个实验的「本次必做 / 可选演示 / 已完成 / 试次数」，供首页渲染。
-- `HW.nextStep(afterKey)`：返回下一个「必做且未完成」的实验，或 `null`（本次任务完成）。
-- `HW.startStep()`：一键按顺序开始本次任务。
-- `HW.finishPage()` 的下一步按钮改为动态计算，**忽略**各实验页里写死的 `nextHref`；设 `usePlan:false` 可退回旧链路。
-
-因此首页点「同意并进入实验选择」后**不再硬跳 `exp1-seev.html`**，而是显示 hub：实验二、实验三各一个独立入口，进度表把实验一标为「可选演示」、实验二/三标为「本次必做」。三个实验页的 `requireSession()` 本来就只要求有会话、不要求先做实验一，可直接进入。结束页链路变为：实验二 → 实验三 → 结果页 / 首页；自愿做完实验一 → 仍引导去做第一个未完成的必做实验。
-
-若以后要三个实验都收，只需在引入 `common.js` **之前**设置 `window.HW_RUN_PLAN = ['seev','prevalence','attitude']`，无需改动任何实验页。
-
-**耗时**（依据 `D:\WorkBuddy\2026-11-05-时长模拟\simulate.js` 的「本轮正式收数」段，代码强制 `[C]` 与人为估计 `[E]` 分开）：只做实验二+三，典型 12 分 14 秒、偏慢 18 分 31 秒、理论下限 5 分 29 秒，对外口径「约 12–19 分钟」；三个实验全做才是 20–30 分钟（典型 22:34）。
-
-**验证**：`D:\WorkBuddy\2026-11-04-收数导航改造\repro10-nav.js` 用无头 Chrome 跑了 41 项断言，覆盖同意后停留首页、两个独立入口、直接进 exp2/exp3、`nextStep`/`startStep` 状态机、三个结束页按钮、`HW_RUN_PLAN` 覆盖、`usePlan:false` 回退，全部 PASS；验证脚本拦截了 `/api/hw2/submit`，不会往实验室库写入测试记录。
-
----
-
-## 10. 实验二眼动采集与注视热图（2026-11-06）
-
-作业示例里给了「注视热图与扫描路径回放（逐件行李）」，因此给**实验二**也接了可选的摄像头眼动，并在结果页做了同款可视化。实验一的眼动机制（`js/gaze.js` + 自托管 `vendor/webgazer/`）直接复用，没有引入新依赖。
-
-**采集**：同意书第三项勾选后，实验二开始页出现「开启摄像头眼动 / 跳过，用鼠标方式直接开始」。开启后走 9 点校准 + 7 点精度自测；试次呈现期间按 **10 Hz** 采样 `Gaze.point`（画布坐标），抽稀为每试次最多 **14** 个 `[x, y, t]` 点。每条 record 新增 `gaze_source`、`gaze_path`、`gaze_n`、`stimulus_seed`、`target_x/y/r`、`target_fixated`；`meta.gaze` 记录采样率、精度自测误差与近似半径倍率。146 试次 × 14 点实测约 **79 KB**，低于接口 256 KB 上限。
-
-> ⚠️ **方法学取舍**：视觉搜索任务中**不在画面上显示注视点**。若被试能看见自己的目光，会改变搜索策略、污染行为数据；因此只在 HUD 显示一个「眼动记录中」小指示。实验一显示白色注视圈是为了让被试确认眼动在驱动仪表，两个任务的约束不同，不要统一。
-
-**可视化**（`js/gazemap.js`，零依赖 canvas）：按 `stimulus_seed` 用 `js/xray.js` 重绘该件行李，金框标刀位置；灰度累积→伪彩色热图（单点冷色、重叠/凝视停留才转黄红）；按时间连线 + 编号注视点，落在刀上的点标红——对应「看了却没报告」的低流行率典型漏报；提供试次下拉、我 / 全班切换、热图 / 扫描路径复选、时间轴滑块与播放回放。
-
-**诚实边界**（已写进结果页）：
-- WebGazer（Papoutsaki et al., 2016, *IJCAI* 3839–3845）是**网页摄像头眼动估计，不是眼动仪**；只做探索性可视化，**不进入效应量、显著性检验或与原文对比**。
-- 鼠标模式 `gaze_source='mouse'`、`gaze_path=[]`，结果页**明确排除**；演示数据也**不生成任何合成注视路径**，绝不拿假眼动数据画图。
-- 行李图由「被试编号 + 试次序号」派生种子生成，**各被试看到的图并不相同**；「全班」只是把坐标放进同一坐标系叠加，不代表同一张图上的真实注视分布。
-- 「落在刀上」按目标外接半径 **×1.35** 近似（考虑网页眼动误差），不是精确 AOI。
-
-**验证**：`D:\WorkBuddy\2026-11-06-眼动热图\repro11-gazemap.js` 无头 Chrome 42 项断言全 PASS，覆盖空态 / 演示模式不造假、热图像素差、我 / 全班、复选、时间轴与回放、鼠标来源被排除、实验二两种注视方式、采样字段与提交体积；脚本拦截了 `/api/hw2/submit` 与 `/api/hw2/data`。
-
-**时长**：只做实验二+三，不开眼动典型 12:14 / 偏慢 18:31；开眼动典型 13:46 / 偏慢 21:03（校准 +1.5–2.5 分钟）。依据 `D:\WorkBuddy\2026-11-05-时长模拟\simulate.js` 的「本轮正式收数」与「开启摄像头眼动」段，代码强制 `[C]` 与人为估计 `[E]` 分开列。

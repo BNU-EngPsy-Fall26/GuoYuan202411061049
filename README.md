@@ -31,7 +31,7 @@ css/style.css           统一样式
 vendor/webgazer/        自托管 WebGazer（GPLv3）与其 MediaPipe FaceMesh 模型
 ```
 
-**运行**：必须是 **https 或 localhost**（`getUserMedia` 需要安全上下文；直接双击用 `file://` 打开时摄像头不可用，但会自动降级为鼠标方式，实验照常能做完）。直接复制“https://bnu-engpsy-fall26.github.io/GuoYuan202411061049/attention_gy/index.html”在浏览器中打开即可开始实验。
+**运行**：必须是 **https 或 localhost**（`getUserMedia` 需要安全上下文；直接双击用 `file://` 打开时摄像头不可用，但会自动降级为鼠标方式，实验照常能做完）。直接复制 `https://bnu-engpsy-fall26.github.io/GuoYuan202411061049/attention_gy/index.html` 在浏览器中打开即可开始实验。
 
 本地预览：
 
